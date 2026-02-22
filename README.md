@@ -1,57 +1,99 @@
-# Ant Design Pro
+Language : [简体中文](README.zh-CN.md)
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+## Sprint Ant Frontend
 
-## Environment Prepare
+Sprint Ant Frontend is based on [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro), an out-of-the-box UI solution for enterprise applications，and the best React framework we've found for admin-panel web applications.  
+Preview the original Ant Design Pro features here: [Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis).  
+We enhanced the base project with:
 
-Install `node_modules`:
+- Unified HTTP payload format for consistent communication with [Spring Ant Backend](https://github.com/HKPC-1967/spring-ant). [requestErrorConfig.ts](src/requestErrorConfig.ts)
+- Loading state management (loading spinners and a loading overlay to prevent user interaction while requests are in progress). [LoadingContext.tsx](src/api_core/components/LoadingContext.tsx)
+- Unified error handling based on `errorCode` and `showType`; Network and HTTP-level errors are also handled uniformly. [requestErrorConfig.ts](src/requestErrorConfig.ts) [MessageProvider.tsx](src/api_core/components/MessageProvider.tsx) [errorCode.ts](src/locales/en-US/errorCode.ts)
+- JWT-based authentication (access token and refresh token). [localStorageUtil.ts](src/utils/localStorageUtil.ts) [refreshTokenUtil.ts](src/utils/refreshTokenUtil.ts)
+- RBAC (Role-Based Access Control) integration with the backend. [access.ts](src/access.ts) [routes.ts](config/routes.ts)
+- Docker support with multi-stage builds. [Dockerfile](Dockerfile)
 
-```bash
-npm install
-```
+You can compare the `main` branch with `original_ant_design_pro_code/release_v6.0.0-beta.1` to review all custom enhancements on top of the original Ant Design Pro codebase.  
+This project is the frontend part of the [Spring Ant Family](https://github.com/HKPC-1967/spring-ant).
 
-or
+## Environment Preparation (Node.js and PNPM)
 
-```bash
-yarn
-```
+### Option 1: [Use Volta](./readme/volta.md) (recommended for managing Node.js and PNPM versions across multiple projects)
 
-## Provided Scripts
+### Option 2: Without Volta (recommended for a quick start if you are not familiar with Volta)
 
-Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
-
-Scripts provided in `package.json`. It's safe to modify or add additional script:
-
-### Start project
-
-```bash
-npm start
-```
-
-### Build project
+Check the Node.js version:
 
 ```bash
-npm run build
+node --version
 ```
 
-### Check code style
+Install `pnpm`:
 
 ```bash
-npm run lint
+npm install pnpm -g
 ```
 
-You can also use script to auto fix some lint error:
+Check the `pnpm` version:
 
 ```bash
-npm run lint:fix
+pnpm --version
 ```
 
-### Test code
+Install dependencies:
 
 ```bash
-npm test
+pnpm install
 ```
 
-## More
+## PNPM Scripts
 
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
+Scripts are defined in [package.json](package.json).
+
+### Run locally with hot reload for development (env: `config.dev.ts`)
+
+`config.${UMI_ENV}.ts` official guide: https://umijs.org/docs/guides/env-variables#umi_env
+
+> **Note**: If you use `pnpm start`, `REACT_APP_ENV` will be `false` instead of `dev`.
+
+```bash
+pnpm run start:dev
+```
+
+### Build the project
+
+- Build for test (env: `config.test.ts`)
+
+```bash
+pnpm run build:test
+```
+
+- Build for production (env: `config.ts`)
+
+```bash
+pnpm run build
+```
+
+## Docker Scripts
+
+### Docker build
+
+- Build for test
+
+```bash
+docker build --build-arg BUILD_COMMAND="build:test" -t spring_ant_frontend .
+```
+
+- Build for production
+
+```bash
+docker build -t spring_ant_frontend .
+```
+
+### Docker run
+
+```bash
+docker run -itdp 8000:80 --name spring_ant_frontend spring_ant_frontend
+```
+
+## [Future Release Plan, Code Contribution, and Code Convention](./readme/code_contribution.md)

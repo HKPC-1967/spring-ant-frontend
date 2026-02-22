@@ -32,7 +32,7 @@ export default [
     path: '/admin',
     name: 'admin',
     icon: 'crown',
-    access: 'canAdmin',
+    access: 'roleAdmin',
     routes: [
       {
         path: '/admin',
@@ -59,5 +59,28 @@ export default [
     path: '*',
     layout: false,
     component: './404',
+  },
+
+  {
+    path: '/rbac',
+    name: 'rbac-test-page',
+    icon: 'folderOpen',
+    routes: [
+      {
+        path: '/rbac',
+        redirect: '/rbac/common',
+      },
+      {
+        path: '/rbac/admin',
+        name: 'admin-page',
+        access: 'roleAdmin',
+        component: './rbac/admin',
+      },
+      {
+        path: '/rbac/common',
+        name: 'common-page',
+        component: './rbac/common',
+      },
+    ],
   },
 ];

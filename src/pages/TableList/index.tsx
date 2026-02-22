@@ -11,10 +11,11 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
+import { Button, Drawer, Input } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
+import { message } from '@/api_core/components/MessageProvider';
 
 /**
  * @en-US Add node
@@ -30,7 +31,7 @@ const handleAdd = async (fields: API.RuleListItem) => {
     return true;
   } catch (error) {
     hide();
-    message.error('Adding failed, please try again!');
+    // message.error('Adding failed, please try again!');
     return false;
   }
 };
@@ -269,6 +270,11 @@ const TableList: React.FC = () => {
           onChange: (_, selectedRows) => {
             setSelectedRows(selectedRows);
           },
+        }}
+        pagination={{
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '20'],
+          defaultPageSize: 10,
         }}
       />
       {selectedRowsState?.length > 0 && (

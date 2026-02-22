@@ -1,16 +1,36 @@
-import { AvatarDropdown, AvatarName, Footer, Question, SelectLang } from '@/components';
+import { AvatarDropdown, AvatarName, Footer, Message, Question, SelectLang } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
-import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
-import React from 'react';
+import { history } from '@umijs/max';
+import React, { ReactNode } from 'react';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import { App, ConfigProvider } from 'antd';
+import { LoadingProvider } from './api_core/components/LoadingContext';
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development' || REACT_APP_ENV === 'dev';
+console.log(
+  'isDev',
+  isDev,
+  'process.env.NODE_ENV',
+  process.env.NODE_ENV,
+  'REACT_APP_ENV',
+  REACT_APP_ENV,
+);
 const loginPath = '/user/login';
+
+export const rootContainer = (root: ReactNode) => (
+  <ConfigProvider>
+    <LoadingProvider>
+      <App>
+        <Message />
+        {root}
+      </App>
+    </LoadingProvider>
+  </ConfigProvider>
+);
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -90,14 +110,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         width: '331px',
       },
     ],
-    links: isDev
-      ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-        ]
-      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,

@@ -49,4 +49,8 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
+
+  'menu.rbac-test-page': 'RBAC Test Page',
+  'menu.rbac-test-page.common-page': 'Common Page',
+  'menu.rbac-test-page.admin-page': 'Admin Sub-Page',
 };

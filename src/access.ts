@@ -4,6 +4,9 @@
 export default function access(initialState: { currentUser?: API.CurrentUser } | undefined) {
   const { currentUser } = initialState ?? {};
   return {
-    canAdmin: currentUser && currentUser.access === 'admin',
+    // this is the default code by ant design pro
+    // canAdmin: currentUser?.access === 'admin',
+    // below is the custom code
+    roleAdmin: currentUser?.roleIds?.includes(1) || false,
   };
 }

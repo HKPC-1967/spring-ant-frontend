@@ -8,6 +8,7 @@ import { stringify } from 'querystring';
 import React from 'react';
 import { flushSync } from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
+import localStorageUtil from '@/utils/localStorageUtil';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -43,19 +44,23 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
    * 退出登录，并且将当前的 url 保存
    */
   const loginOut = async () => {
-    await outLogin();
-    const { search, pathname } = window.location;
-    const urlParams = new URL(window.location.href).searchParams;
-    /** 此方法会跳转到 redirect 参数所在的位置 */
-    const redirect = urlParams.get('redirect');
-    // Note: There may be security issues, please note
-    if (window.location.pathname !== '/user/login' && !redirect) {
-      history.replace({
-        pathname: '/user/login',
-        search: stringify({
-          redirect: pathname + search,
-        }),
-      });
+    try {
+      await outLogin();
+    } catch (error) {
+      console.log('log out:', error);
+    } finally {
+      localStorageUtil.removeAllJwtToken();
+      const { search, pathname } = window.location;
+      const urlParams = new URL(window.location.href).searchParams;
+      const redirect = urlParams.get('redirect');
+      if (window.location.pathname !== '/user/login' && !redirect) {
+        history.replace({
+          pathname: '/user/login',
+          search: stringify({
+            redirect: pathname + search,
+          }),
+        });
+      }
     }
   };
   const { styles } = useStyles();

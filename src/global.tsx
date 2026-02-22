@@ -1,5 +1,6 @@
 import { useIntl } from '@umijs/max';
-import { Button, message, notification } from 'antd';
+import { Button } from 'antd';
+import { message, notification } from '@/api_core/components/MessageProvider';
 import defaultSettings from '../config/defaultSettings';
 
 const { pwa } = defaultSettings;
