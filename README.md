@@ -1,4 +1,4 @@
-Language : [简体中文](README.zh-CN.md)
+Language : [简体中文](README.zh-CN.md) | [繁體中文](README.zh-HK.md)
 
 ## Sprint Ant Frontend
 

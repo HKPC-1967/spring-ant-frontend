@@ -1,4 +1,4 @@
-Language : [English](README.md)
+Language : [English](README.md) | [繁體中文](README.zh-HK.md)
 
 ## Sprint Ant Frontend
 
@@ -18,7 +18,7 @@ Sprint Ant Frontend 基于 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant
 
 ## 环境准备（Node.js 与 PNPM）
 
-### 方案 1：[使用 Volta](./readme/volta.md)（推荐用于在多个项目间统一管理 Node.js 与 PNPM 版本）
+### 方案 1：[使用 Volta](./readme/volta.zh-CN.md)（推荐用于在多个项目间统一管理 Node.js 与 PNPM 版本）
 
 ### 方案 2：不使用 Volta（如果你不熟悉 Volta，推荐快速开始采用此方案）
 
@@ -96,4 +96,4 @@ docker build -t base_front .
 docker run -itdp 80:80 --name base_front base_front
 ```
 
-## [后续发布计划、代码贡献与代码规范](./readme/code_contribution.md)
+## [后续发布计划、代码贡献与代码规范](./readme/code_contribution.zh-CN.md)

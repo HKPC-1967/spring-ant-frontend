@@ -1,5 +1,6 @@
 export default {
-  'pages.layouts.userLayout.title': 'SpringBoot + Ant',
+  'pages.layouts.userLayout.title':
+    '\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000Spring Boot + Ant Design Pro',
   'pages.login.accountLogin.tab': 'Account Login',
   'pages.login.accountLogin.errorMessage': 'Incorrect username/password(admin/ant.design)',
   'pages.login.failure': 'Login failed, please try again!',
