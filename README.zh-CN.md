@@ -1,10 +1,10 @@
 Language : [English](README.md) | [繁體中文](README.zh-HK.md)
 
-## Sprint Ant Frontend
+## Sprint Ant Frontend ([Spring Ant Family](https://github.com/HKPC-1967/spring-ant)的前端部分)
 
-Sprint Ant Frontend 基于 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro)，这是一个开箱即用的企业级 UI 框架，也是我们找到的最好的用于开发 后台管理系统 的 React 框架。  
-可在这里预览原始 Ant Design Pro 功能：[Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis)。  
-我们对基础项目做了一下增强：
+Sprint Ant Frontend 基于 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro)，这是一个开箱即用的企业级 UI 框架，也是我们找到的最好的用于开发 后台管理系统 的 React 框架。可在这里预览原始 Ant Design Pro 功能：[Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis)。
+
+我们对基础项目做了以下增强：
 
 - 统一的HTTP payload格式，与后端[Spring Ant Backend](https://github.com/HKPC-1967/spring-ant)集成。[requestErrorConfig.ts](src/requestErrorConfig.ts)
 - Loading 状态管理（加载中的局部loading动画以及全局遮罩，避免请求进行中用户继续操作）。[LoadingContext.tsx](src/api_core/components/LoadingContext.tsx)
