@@ -7,33 +7,39 @@ ARG SERVE_VERSION=14.2.5
 
 ################################################################################
 # Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
+
+# Pin pnpm and serve inside the actual build stage
+ARG PNPM_VERSION
+ARG SERVE_VERSION
 
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
+# Skip Husky in container builds where there is no .git directory.
+ENV HUSKY=0
+
 # Install pnpm.
 RUN --mount=type=cache,target=/root/.npm \
-    npm install -g pnpm@${PNPM_VERSION} serve@${SERVE_VERSION}
+    npm install -g pnpm@${PNPM_VERSION} serve@${SERVE_VERSION} && pnpm --version
 
 ################################################################################
 # Create a stage for installing production dependecies.
-FROM base as deps
+FROM base AS deps
+
+# Copy the dependency manifests needed for installation.
+COPY package.json pnpm-lock.yaml ./
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
-# Leverage bind mounts to package.json and pnpm-lock.yaml to avoid having to copy them
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,target=/root/.local/share/pnpm/store \
-    pnpm install
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile
 
 ################################################################################
 # Create a stage for building the application.
 ARG BUILD_COMMAND="build"
 
-FROM deps as build
+FROM deps AS build
 
 # Download additional development dependencies before building, as some projects require
 # "devDependencies" to be installed to build. If you don't need this, remove this step.
@@ -50,7 +56,7 @@ RUN pnpm run ${BUILD_COMMAND}
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
-FROM base as final
+FROM base AS final
 
 # Use production node environment by default.
 # ENV NODE_ENV production
@@ -71,4 +77,4 @@ COPY --from=build /usr/src/app/dist .
 EXPOSE 80
 
 # Run the application.
-CMD serve -s -p 80 .
+CMD ["serve", "-s", "-p", "80", "."]

@@ -25,3 +25,9 @@ pnpm test
 ```bash
 docker run -itdp 8000:80 --restart=unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=3 --name spring_ant_frontend spring_ant_frontend
 ```
+
+- `--progress=plain --no-cache` is used for detailed logging without cache
+
+```bash
+docker build -t spring_ant_frontend . --progress=plain --no-cache
+```
