@@ -4,7 +4,7 @@
 
 不過，安裝 Volta 本身時，如果擁有管理員權限會更方便。
 
-[安裝 Volta](https://docs.volta.sh/guide/getting-started)
+[安裝 Volta 的官方文件](https://docs.volta.sh/guide/getting-started)
 
 如果你連安裝 Volta 都沒有管理員權限，可以參考這篇指南：
 
@@ -12,30 +12,8 @@
 
 通常你需要重新啟動終端或 VS Code，以重新整理環境變數並正常使用 Volta。
 
-## Volta 使用指南
 
-官方指南：https://docs.volta.sh/guide/
-
-### 我還需要手動安裝 Node 嗎？
-
-如果 `package.json` 中已經有下面這段設定（也就是已經有人固定好版本）：
-
-```json
-{
-  "volta": {
-    "node": "22.11.0"
-  }
-}
-```
-
-那麼你就不需要手動安裝了。  
-只要執行 `node` 指令，Volta 就會自動幫你下載正確的版本。
-
-#### 在 package.json 中固定 Node 版本（如果還沒做）
-
-`volta pin node@22.11.0`
-
-### 使用 Volta 安裝 pnpm
+## 使用 Volta 安裝 pnpm
 
 相關文件：
 
@@ -44,13 +22,31 @@
 
 基本步驟：
 
-1. 在環境變數中設定 `VOLTA_FEATURE_PNPM=1`
-2. 執行 `volta install pnpm`。（如果專案的 `package.json` 已經固定了 pnpm 版本，則這一步不是必須的；直接執行 `pnpm` 指令即可觸發自動安裝）
+#### 1. 啟用 Volta 對 pnpm 的實驗性支援
 
-#### 在 package.json 中固定 pnpm 版本（如果還沒做）
+- **Windows**：在系統環境變數中添加 `VOLTA_FEATURE_PNPM`，值設為 `1`。
 
-`volta pin pnpm@9.14.4`
+- **macOS / Linux**：在 shell 設定檔中添加（如 `~/.zshrc`、`~/.bash_profile`）：
+  ```bash
+  export VOLTA_FEATURE_PNPM=1
+  ```
+  然後重新開啟終端或執行 `source ~/.zshrc` 生效。
 
-### 檢查已安裝的 Node 和 pnpm 版本
 
-`volta list all`
+#### 2. 執行 `volta install pnpm`。（如果專案的 `package.json` 已經固定了 pnpm 版本，則這一步不是必須的；直接執行 `pnpm` 指令即可觸發自動安裝）
+
+
+
+## 檢查已安裝的 Node 和 pnpm 版本
+
+```bash
+volta list all
+```
+
+```bash
+node -v
+```
+
+```bash
+pnpm -v
+```

@@ -17,10 +17,10 @@ Sprint Ant Frontend 基於 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant
 本專案是 [Spring Ant Family](https://github.com/HKPC-1967/spring-ant) 的前端部分。
 
 ## 環境準備（Node.js 與 PNPM）
+> 本專案使用的 Node.js 與 PNPM 版本定義在 `package.json` 的 `volta` 物件中，建議保持版本一致以防止版本相容性問題
+### 方案 1：[使用 Volta](./readme/volta.zh-HK.md)（推薦，可管理多個專案的 Node.js 與 PNPM 版本）
 
-### 方案 1：[使用 Volta](./readme/volta.zh-HK.md)（推薦用於在多個專案間統一管理 Node.js 與 PNPM 版本）
-
-### 方案 2：不使用 Volta（如果你不熟悉 Volta，推薦快速開始採用此方案）
+### 方案 2：不使用 Volta（如果你不熟悉 Volta 想快速開始，但請注意 Node.js 大版本要保持一致）
 
 檢查 Node.js 版本：
 
