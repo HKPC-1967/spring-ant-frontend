@@ -1,34 +1,30 @@
 # AGENTS.md
 
-This AGENTS.md serves as a overview guide for AI on implementing a new business solution that integrates frontend and backend.
+This AGENTS.md guides AI agents working in `spring-ant-frontend`, especially when a frontend change must align with backend contracts from `spring-ant`.
 
-## Workspace Overview
+# Part 1: Frontend/Backend Integration
 
-- `spring-ant` is the Spring Boot backend.
 - `spring-ant-frontend` is the Ant Design Pro frontend.
-- The backend serves APIs under the `/api` context path.
+- `spring-ant` is the Spring Boot backend and serves APIs under the `/api` context path.
 - The frontend already includes JWT login, refresh-token handling, unified HTTP response handling, and RBAC helpers.
+- Keep backend-only implementation conventions in `spring-ant/AGENTS.md`; this section is only for API contracts and frontend/backend handoff rules.
 
-## Full-Stack Feature Workflow
+## Integration Workflow
 
-1. Start from the database and business contract.
-2. Add or update SQL under `spring-ant/readme/sql` when a new feature needs new tables or seed data.
-3. Implement backend DTO, controller, service, mapper, and mapper XML under `spring-ant/src/main/java` and `spring-ant/src/main/resources/mapper`.
-4. Reuse the existing unified backend response envelope instead of inventing a new format.
-5. Update Spring Security route rules if the new backend endpoints need role-based protection.
-6. Add or update frontend API wrappers under `spring-ant-frontend/src/services`.
-7. Add the frontend page under `spring-ant-frontend/src/pages`, then register the route in `spring-ant-frontend/config/routes.ts`.
-8. Reuse the existing frontend auth and request pipeline instead of bypassing it.
-9. Validate the backend with `./gradlew.bat compileJava` and the frontend with `npm run tsc`.
+1. Start from the API contract: request DTO, response DTO, error codes, auth requirements, and any binary download behavior.
+2. If the backend contract changes, align frontend service types and wrappers under `src/services`.
+3. Reuse the existing unified backend response envelope for normal JSON APIs; do not create one-off frontend parsing paths.
+4. If backend `ErrorCodeEnum` changes, add the same code and user-facing message to `src/locales/*/errorCode.ts`.
+5. If a backend endpoint is role-restricted, keep frontend route access in sync through `src/access.ts` and `config/routes.ts`.
+6. If a backend current-user payload changes, preserve `currentUser.roleIds` compatibility because frontend RBAC depends on it.
 
-## Backend Guidance
+## Auth And Response Contracts
 
-- Controllers should stay thin and delegate business logic to services.
-- Business errors should use `CodeException` with `ErrorCodeEnum` so the frontend can handle them consistently.
-- The unified response format comes from `MainAspect` and `ResponseStructureUtil`; normal JSON endpoints should keep using it.
-- File download endpoints that return binary data should be added to `MainAspect.NO_CHANGE_RESULT_URLS`.
-- JWT auth uses `Authorization: Bearer <token>` for access tokens and `refreshToken: Bearer <token>` for refresh tokens.
-- Frontend RBAC depends on `currentUser.roleIds`, so backend current-user payloads must keep returning role IDs.
+- Normal JSON APIs should go through `src/requestErrorConfig.ts` so auth headers, refresh-token logic, response unwrapping, and unified error handling stay consistent.
+- JWT access tokens are sent as `Authorization: Bearer <token>`.
+- Refresh tokens are sent as `refreshToken: Bearer <token>`.
+- Use native `fetch` only when the response is not normal JSON, such as Excel download.
+- Business errors from the backend should map to localized frontend messages through `src/locales/*/errorCode.ts`.
 
 ## Frontend Guidance
 
@@ -40,8 +36,37 @@ This AGENTS.md serves as a overview guide for AI on implementing a new business 
 
 ## Validation Checklist
 
-- Backend SQL matches backend mapper and service expectations.
-- Backend compile succeeds.
 - Frontend type-check succeeds.
+- Frontend service types match backend request and response DTOs.
 - Frontend route is reachable after login.
 - Admin and normal user flows both work with real backend data.
+
+
+# Part 2: Frontend Structure
+
+- `config/routes.ts`: menu and route registration.
+- `config/config.ts`: Umi and Ant Design Pro runtime config.
+- `src/app.tsx`: root container, initial user bootstrap, layout config, and request config export.
+- `src/requestErrorConfig.ts`: request interceptors, refresh-token logic, and unified frontend error handling.
+- `src/utils/localStorageUtil.ts`: JWT token persistence.
+- `src/utils/refreshTokenUtil.ts`: access-token refresh flow.
+- `src/access.ts`: route-level RBAC flags based on `currentUser.roleIds`.
+- `src/services`: request wrappers grouped by business area.
+- `src/pages`: page-level UI.
+- `src/api_core/components/MessageProvider.tsx`: global message, notification, and modal access outside the component tree.
+
+## How To Add A New Page Manually
+
+1. Create a new folder under `src/pages` for the new business.
+2. Add `index.tsx` for the page component and `index.less` for page-local styles.
+3. Register the page in `config/routes.ts` with its menu name, path, icon, and component path.
+4. If the page calls backend APIs, add a dedicated service file under `src/services/<feature>`.
+5. If the page is role-restricted, expose or reuse an access flag in `src/access.ts` and reference it from the route.
+6. If the page downloads a file instead of normal JSON, use native `fetch` with the existing JWT token from `localStorageUtil`.
+
+## Integration Rules
+
+- Do not bypass `requestErrorConfig.ts` for normal JSON APIs.
+- Do not duplicate JWT storage logic; always reuse `localStorageUtil.ts`.
+- Keep feature-specific types close to the feature service or page instead of polluting unrelated global files.
+
