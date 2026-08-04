@@ -17,7 +17,9 @@ You can compare the `main` branch with `original_ant_design_pro_code/release_v6.
 This project is the frontend part of the [Spring Ant Family](https://github.com/HKPC-1967/spring-ant).
 
 ## Environment Preparation (Node.js and PNPM)
+
 > The Node.js and PNPM versions used by this project are defined in the `volta` object in `package.json`. We recommend keeping versions aligned to avoid compatibility issues.
+
 ### Option 1: [Use Volta](./readme/volta.md) (recommended; manages Node.js and PNPM versions across multiple projects)
 
 ### Option 2: Without Volta (use this for a quick start if you are not familiar with Volta, but keep the Node.js major version consistent)
@@ -93,7 +95,7 @@ docker build -t spring_ant_frontend .
 ### Docker run
 
 ```bash
-docker run -itdp 8000:80 --name spring_ant_frontend spring_ant_frontend
+docker run -d -p 8000:80 --name spring_ant_frontend spring_ant_frontend
 ```
 
 ## [Future Release Plan, Code Contribution, and Code Convention](./readme/code_contribution.md)

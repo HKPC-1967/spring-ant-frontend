@@ -17,7 +17,9 @@ Spring Ant Frontend 基于 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant
 本项目是 [Spring Ant Family](https://github.com/HKPC-1967/spring-ant) 的前端部分。
 
 ## 环境准备（Node.js 与 PNPM）
+
 > 本项目用的 Node.js 与 PNPN 版本定义在 `package.json` 的 `volta` 对象中，建议保持版本一致防止版本兼容问题
+
 ### 方案 1：[使用 Volta](./readme/volta.zh-CN.md)（推荐，可管理多个项目的 Node.js 与 PNPM 版本）
 
 ### 方案 2：不使用 Volta（如果你不熟悉 Volta 想快速开始，但注意 Node.js 大版本要保持一致）
@@ -93,7 +95,7 @@ docker build -t base_front .
 ### Docker 运行
 
 ```bash
-docker run -itdp 80:80 --name base_front base_front
+docker run -d -p 80:80 --name base_front base_front
 ```
 
 ## [后续发布计划、代码贡献与代码规范](./readme/code_contribution.zh-CN.md)
