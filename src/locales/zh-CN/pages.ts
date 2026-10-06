@@ -1,8 +1,9 @@
 export default {
   'pages.layouts.userLayout.title':
-    '\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000Spring Boot + Ant Design Pro',
+    'Ant Design 是西湖区最具影响力的 Web 设计规范',
   'pages.login.accountLogin.tab': '账户密码登录',
-  'pages.login.accountLogin.errorMessage': '错误的用户名和密码(admin/ant.design)',
+  'pages.login.accountLogin.errorMessage':
+    '错误的用户名和密码(admin/ant.design)',
   'pages.login.failure': '登录失败，请重试！',
   'pages.login.success': '登录成功！',
   'pages.login.username.placeholder': '用户名: admin or user',
@@ -24,11 +25,22 @@ export default {
   'pages.login.loginWith': '其他登录方式 :',
   'pages.login.registerAccount': '注册账户',
   'pages.welcome.link': '欢迎使用',
+  'pages.welcome.celebrationTitle': '欢迎使用 Ant Design Pro {v6}',
   'pages.welcome.alertMessage': '更快更强的重型组件，已经发布。',
+  'pages.welcome.infoCard.umi.title': '了解 umi',
+  'pages.welcome.infoCard.umi.desc':
+    'umi 是一个可扩展的企业级前端应用框架，以路由为基础，支持配置式路由和约定式路由。',
+  'pages.welcome.infoCard.antd.title': '了解 Ant Design',
+  'pages.welcome.infoCard.antd.desc':
+    'antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。',
+  'pages.welcome.infoCard.procomponents.title': '了解 Pro Components',
+  'pages.welcome.infoCard.procomponents.desc':
+    'ProComponents 是基于 Ant Design 的高抽象模板组件，以一个组件就是一个页面为开发理念。',
   'pages.404.subTitle': '抱歉，您访问的页面不存在。',
   'pages.404.buttonText': '返回首页',
   'pages.admin.subPage.title': ' 这个页面只有 admin 权限才能查看',
-  'pages.admin.subPage.alertMessage': 'umi ui 现已发布，欢迎使用 npm run ui 启动体验。',
+  'pages.admin.subPage.alertMessage':
+    'umi ui 现已发布，欢迎使用 npm run ui 启动体验。',
   'pages.searchTable.createForm.newRule': '新建规则',
   'pages.searchTable.updateForm.ruleConfig': '规则配置',
   'pages.searchTable.updateForm.basicConfig': '基本信息',
@@ -36,7 +48,8 @@ export default {
   'pages.searchTable.updateForm.ruleName.nameRules': '请输入规则名称！',
   'pages.searchTable.updateForm.ruleDesc.descLabel': '规则描述',
   'pages.searchTable.updateForm.ruleDesc.descPlaceholder': '请输入至少五个字符',
-  'pages.searchTable.updateForm.ruleDesc.descRules': '请输入至少五个字符的规则描述！',
+  'pages.searchTable.updateForm.ruleDesc.descRules':
+    '请输入至少五个字符的规则描述！',
   'pages.searchTable.updateForm.ruleProps.title': '配置规则属性',
   'pages.searchTable.updateForm.object': '监控对象',
   'pages.searchTable.updateForm.ruleProps.templateLabel': '规则模板',

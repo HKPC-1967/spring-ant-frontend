@@ -4,20 +4,17 @@ import type { ProLayoutProps } from '@ant-design/pro-components';
  * @name
  */
 const Settings: ProLayoutProps & {
-  pwa?: boolean;
   logo?: string;
 } = {
   navTheme: 'light',
-  // 拂晓蓝
-  colorPrimary: '#1890ff',
+  colorPrimary: '#1677ff',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Spring Ant',
-  pwa: true,
-  logo: 'logo.png',
+  title: 'Ant Design Pro',
+  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
   token: {
     // 参见ts声明，demo 见文档，通过token 修改样式

@@ -1,31 +1,26 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { SelectLang as UmiSelectLang } from '@umijs/max';
+import { BookOutlined } from '@ant-design/icons';
+import { history } from '@umijs/max';
+import { Button, Tooltip } from 'antd';
 import React from 'react';
+import { LangDropdown } from './LangDropdown';
+import useHeaderActionStyles from './style';
+import { VersionDropdown } from './VersionDropdown';
 
-export type SiderTheme = 'light' | 'dark';
-
-export const SelectLang = () => {
+export const DocLink: React.FC = () => {
+  const { styles } = useHeaderActionStyles();
   return (
-    <UmiSelectLang
-      style={{
-        padding: 4,
-      }}
-    />
+    <Tooltip title="使用文档">
+      <Button
+        type="text"
+        className={styles.action}
+        icon={<BookOutlined />}
+        aria-label="使用文档"
+        onClick={() => {
+          history.push('/welcome');
+        }}
+      />
+    </Tooltip>
   );
 };
 
-export const Question = () => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        height: 26,
-      }}
-      onClick={() => {
-        window.open('https://pro.ant.design/docs/getting-started');
-      }}
-    >
-      <QuestionCircleOutlined />
-    </div>
-  );
-};
+export { LangDropdown, VersionDropdown };

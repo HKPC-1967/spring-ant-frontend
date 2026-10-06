@@ -1,4 +1,3 @@
-declare module 'slash2';
 declare module '*.css';
 declare module '*.less';
 declare module '*.scss';
@@ -10,11 +9,12 @@ declare module '*.jpeg';
 declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
-declare module 'omit.js';
-declare module 'numeral';
-declare module '@antv/data-set';
-declare module 'react-fittext';
-declare module 'bizcharts-plugin-slider';
+declare module '*.md' {
+  const content: string;
+  export default content;
+}
+declare module 'mockjs';
 
-declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | 'prod';
-declare const ENABLE_REFRESH_TOKEN: boolean;
+declare const __APP_VERSION__: string;
+declare const __UMI_VERSION__: string;
+declare const __UTOO_VERSION__: string;

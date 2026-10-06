@@ -1,101 +1,161 @@
-Language : [English](README.md) | [繁體中文](README.zh-HK.md)
+Language : [English](./README.md) | 简体中文
 
-## Spring Ant Frontend ([Spring Ant Family](https://github.com/HKPC-1967/spring-ant)的前端部分)
+<h1 align="center">Ant Design Pro</h1>
 
-Spring Ant Frontend 基于 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro)，这是一个开箱即用的企业级 UI 框架，也是我们找到的最好的用于开发 后台管理系统 的 React 框架。可在这里预览原始 Ant Design Pro 功能：[Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis)。
+<div align="center">
 
-我们对基础项目做了以下增强：
+开箱即用的中台前端/设计解决方案。
 
-- 统一的HTTP payload格式，与后端[Spring Ant Backend](https://github.com/HKPC-1967/spring-ant)集成。[requestErrorConfig.ts](src/requestErrorConfig.ts)
-- Loading 状态管理（加载中的局部loading动画以及全局遮罩，避免请求进行中用户继续操作）。[LoadingContext.tsx](src/api_core/components/LoadingContext.tsx)
-- 基于 `errorCode` 和 `showType` 的统一异常处理；同时对网络错误和 HTTP 层级错误也做了统一处理。[requestErrorConfig.ts](src/requestErrorConfig.ts) [MessageProvider.tsx](src/api_core/components/MessageProvider.tsx)
-- 基于 JWT 的认证（access token 与 refresh token）。[localStorageUtil.ts](src/utils/localStorageUtil.ts) [refreshTokenUtil.ts](src/utils/refreshTokenUtil.ts)
-- 与后端集成的 RBAC（基于角色的访问控制）。[access.ts](src/access.ts) [routes.ts](config/routes.ts)
-- 支持 Docker 多阶段构建。[Dockerfile](Dockerfile)
+[![CI](https://github.com/ant-design/ant-design-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-pro/actions/workflows/ci.yml)
+[![GitHub release](https://img.shields.io/github/v/release/ant-design/ant-design-pro.svg)](https://github.com/ant-design/ant-design-pro/releases)
+[![Build With Utoo](https://img.shields.io/badge/build%20with-utoo-028fe4.svg)](https://utoo.land)
+[![Build With Umi](https://img.shields.io/badge/build%20with-umi-028fe4.svg)](https://umijs.org/)
+[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
+[![Ant Design](https://badgen.net/badge/icon/Ant%20Design?icon=https://gw.alipayobjects.com/zos/antfincdn/Pp4WPgVDB3/KDpgvguMpGfqaHPjicRK.svg&label)](https://ant.design/)
 
-你可以对比 `main` 分支与 `original_ant_design_pro_code/release_v6.0.0-beta.1` 分支，查看我们在原始的 Ant Design Pro 代码基础上做了哪些代码改动。  
-本项目是 [Spring Ant Family](https://github.com/HKPC-1967/spring-ant) 的前端部分。
+![](https://github.com/user-attachments/assets/fde29061-3d9a-4397-8ac2-397b0e033ef5)
 
-## 环境准备（Node.js 与 PNPM）
+</div>
 
-> 本项目用的 Node.js 与 PNPN 版本定义在 `package.json` 的 `volta` 对象中，建议保持版本一致防止版本兼容问题
+- 预览：https://preview.pro.ant.design
+- 使用文档：[docs/cheatsheet.zh-CN.md](./docs/cheatsheet.zh-CN.md)
+- 更新日志: https://github.com/ant-design/ant-design-pro/releases
+- 常见问题：[docs/cheatsheet.zh-CN.md#faq](./docs/cheatsheet.zh-CN.md#faq)
+- **v6 正式发布！** — [查看 v6 更新内容](https://github.com/ant-design/ant-design-pro/releases/tag/v6.0.0)
 
-### 方案 1：[使用 Volta](./readme/volta.zh-CN.md)（推荐，可管理多个项目的 Node.js 与 PNPM 版本）
+## 特性
 
-### 方案 2：不使用 Volta（如果你不熟悉 Volta 想快速开始，但注意 Node.js 大版本要保持一致）
+- :bulb: **TypeScript**: 应用程序级 JavaScript 的语言
+- :scroll: **区块**: 通过区块模板快速构建页面
+- :gem: **优雅美观**：基于 [Ant Design 6](https://ant.design/) 体系精心设计
+- :triangular_ruler: **常见设计模式**：提炼自中后台应用的典型页面和场景
+- :rocket: **最新技术栈**：使用 React 19/[Umi Max 4](https://umijs.org/)/[antd 6](https://ant.design/)/[utoopack](https://utoo.land) 等前端前沿技术开发
+- :iphone: **响应式**：针对不同屏幕大小设计
+- :art: **主题**：基于 [Tailwind CSS v4](https://tailwindcss.com/) + [antd-style](https://github.com/ant-design/antd-style) 的可配置主题满足多样化品牌诉求
+- :globe_with_meridians: **国际化**：内建业界通用的国际化方案
+- :gear: **最佳实践**：良好的工程实践助您持续产出高质量代码
+- :1234: **Mock 数据**：实用的本地数据调试方案
+- :robot: **AI 助手**：内置 AI 聊天助手页面，基于 [Ant Design X](https://x.ant.design/)
+- :white_check_mark: **UI 测试**：自动化测试保障前端产品质量
 
-检查 Node.js 版本：
+## 模板
 
-```bash
-node --version
+```
+- 欢迎页
+- Dashboard
+  - 分析页
+  - 监控页
+  - 工作台
+- 表单页
+  - 基础表单页
+  - 分步表单页
+  - 高级表单页
+- 列表页
+  - 搜索列表（文章/项目/应用）
+  - 查询表格
+  - 标准列表
+  - 卡片列表
+- 详情页
+  - 基础详情页
+  - 高级详情页
+- 结果
+  - 成功页
+  - 失败页
+- 异常
+  - 403 无权限
+  - 404 找不到
+  - 500 服务器出错
+- 用户
+  - 用户中心页
+  - 用户设置页
+- AI 助手
+- 账户
+  - 登录
+  - 注册
+  - 注册成功
 ```
 
-安装 `pnpm`：
+## 使用
+
+### 开始使用
+
+克隆或下载本项目到本地：
 
 ```bash
-npm install pnpm -g
+git clone --depth=1 https://github.com/ant-design/ant-design-pro.git myapp
+cd myapp
 ```
 
-检查 `pnpm` 版本：
+### 安装依赖
 
 ```bash
-pnpm --version
+npm install
 ```
 
-安装依赖：
+### 开发
 
 ```bash
-pnpm install
+# 启动开发服务器（默认为完整版）
+npm start
 ```
 
-## PNPM 脚本
+### 精简为简单版本
 
-脚本定义在 [package.json](package.json) 中。
-
-### 本地开发热更新运行（环境：`config.dev.ts`）
-
-`config.${UMI_ENV}.ts` 官方文档: https://umijs.org/docs/guides/env-variables#umi_env
-
-> **注意**：如果使用 `pnpm start`，`REACT_APP_ENV` 的值会是 `false`，而不是 `dev`。
+本项目默认包含所有区块。如果你需要一个最小化的版本，运行：
 
 ```bash
-pnpm run start:dev
+npm run simple
 ```
 
-### 构建项目
+这将会：
+- 删除多余的页面目录（dashboard、form、list/*、profile、result、exception、account 等）
+- 删除多余的 mock 文件
+- 替换路由为简单版本
+- 从 package.json 中移除多余的依赖
 
-- 测试环境构建（环境：`config.test.ts`）
+**注意**：此操作不可逆，将永久删除文件。
+
+### 构建
 
 ```bash
-pnpm run build:test
+npm run build
 ```
 
-- 生产环境构建（环境：`config.ts`）
+更多信息请参考 [使用文档](./docs/cheatsheet.zh-CN.md)。
+
+## AI Skills（Claude Code）
+
+本项目内置了两个 [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)，位于 `.claude/skills/` 目录下：
+
+| Skill | 触发词 | 说明 |
+|---|---|---|
+| `/pro-upgrade` | "升级"、"upgrade pro"、"update to latest" | 自动升级到最新 Ant Design Pro 版本。对比最新模板差异，合并框架变更并保留业务代码。 |
+| `/antd` | antd 相关代码或问题 | 查询 antd 组件 API、props、token、demo；检查废弃用法；跨版本迁移 — 基于 `@ant-design/cli`。 |
+
+**在 Claude Code 中使用：**
 
 ```bash
-pnpm run build
+# 升级项目到最新 Pro 版本
+/pro-upgrade
+
+# 查询 antd 组件信息、调试问题、运行 lint 等
+/antd
 ```
 
-## Docker 脚本
+> 💡 如果你的项目是从本仓库克隆的，这些 skill 已经内置，无需额外安装。如需获取最新 skill 定义，可以从模板拉取更新或运行 `npx skills add ant-design/ant-design-pro` 刷新。
 
-### Docker 构建
+## 支持环境
 
-- 测试环境构建
+现代浏览器。
 
-```bash
-docker build --build-arg BUILD_COMMAND="build:test" -t base_front .
-```
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
+| --- | --- | --- | --- |
+| Edge | last 2 versions | last 2 versions | last 2 versions |
 
-- 生产环境构建
+## 参与贡献
 
-```bash
-docker build -t base_front .
-```
+我们非常欢迎你的贡献，你可以通过以下方式和我们一起共建 :smiley:：
 
-### Docker 运行
-
-```bash
-docker run -d -p 80:80 --name base_front base_front
-```
-
-## [后续发布计划、代码贡献与代码规范](./readme/code_contribution.zh-CN.md)
+- 在你的公司或个人项目中使用 Ant Design Pro。
+- 通过 [Issue](http://github.com/ant-design/ant-design-pro/issues) 报告 bug 或进行咨询。
+- 提交 [Pull Request](http://github.com/ant-design/ant-design-pro/pulls) 改进 Pro 的代码。
