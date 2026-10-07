@@ -16,11 +16,11 @@ We enhanced the base project with:
 You can compare the `main` branch with `original_ant_design_pro_code/release_v6.0.0-beta.1` to review all custom enhancements on top of the original Ant Design Pro codebase.  
 This project is the frontend part of the [Spring Ant Family](https://github.com/HKPC-1967/spring-ant).
 
-## Environment Preparation (Node.js and PNPM)
+## Environment Preparation (Node.js and npm)
 
-> The Node.js and PNPM versions used by this project are defined in the `volta` object in `package.json`. We recommend keeping versions aligned to avoid compatibility issues.
+> The Node.js version required by this project is defined in the `engines` field in `package.json`. npm is bundled with Node.js. We recommend keeping versions aligned to avoid compatibility issues.
 
-### Option 1: [Use Volta](./readme/volta.md) (recommended; manages Node.js and PNPM versions across multiple projects)
+### Option 1: [Use Volta](./readme/volta.md) (recommended; manages Node.js versions across multiple projects)
 
 ### Option 2: Without Volta (use this for a quick start if you are not familiar with Volta, but keep the Node.js major version consistent)
 
@@ -30,25 +30,19 @@ Check the Node.js version:
 node --version
 ```
 
-Install `pnpm`:
+Check the `npm` version:
 
 ```bash
-npm install pnpm -g
-```
-
-Check the `pnpm` version:
-
-```bash
-pnpm --version
+npm --version
 ```
 
 Install dependencies:
 
 ```bash
-pnpm install
+npm install
 ```
 
-## PNPM Scripts
+## npm Scripts
 
 Scripts are defined in [package.json](package.json).
 
@@ -56,10 +50,10 @@ Scripts are defined in [package.json](package.json).
 
 `config.${UMI_ENV}.ts` official guide: https://umijs.org/docs/guides/env-variables#umi_env
 
-> **Note**: If you use `pnpm start`, `REACT_APP_ENV` will be `false` instead of `dev`.
+> **Note**: If you use `npm start`, `REACT_APP_ENV` will be `false` instead of `dev`.
 
 ```bash
-pnpm run start:dev
+npm run start:dev
 ```
 
 ### Build the project
@@ -67,13 +61,13 @@ pnpm run start:dev
 - Build for test (env: `config.test.ts`)
 
 ```bash
-pnpm run build:test
+npm run build:test
 ```
 
 - Build for production (env: `config.ts`)
 
 ```bash
-pnpm run build
+npm run build
 ```
 
 ## Docker Scripts

@@ -13,31 +13,32 @@
 通常你需要重新啟動終端或 VS Code，以重新整理環境變數並正常使用 Volta。
 
 
-## 使用 Volta 安裝 pnpm
+## 使用 Volta 管理 Node.js 與 npm
+
+本專案使用 **npm** 作為套件管理工具。npm 隨 Node.js 一併提供，因此只要透過 Volta 安裝了正確的 Node.js 版本，就可以直接使用 `npm`。
 
 相關文件：
 
-- https://docs.volta.sh/advanced/pnpm
-- https://pnpm.io/installation#using-volta
+- https://docs.volta.sh/guide/understanding
 
 基本步驟：
 
-#### 1. 啟用 Volta 對 pnpm 的實驗性支援
+#### 1. 安裝專案要求的 Node.js 版本
 
-- **Windows**：在系統環境變數中添加 `VOLTA_FEATURE_PNPM`，值設為 `1`。
+如果專案的 `package.json` 已經固定了 Node.js 版本（透過 `engines` 或 Volta 設定），進入專案目錄後執行任意 Node/npm 指令即可觸發自動安裝。也可以手動安裝指定版本：
 
-- **macOS / Linux**：在 shell 設定檔中添加（如 `~/.zshrc`、`~/.bash_profile`）：
-  ```bash
-  export VOLTA_FEATURE_PNPM=1
-  ```
-  然後重新開啟終端或執行 `source ~/.zshrc` 生效。
+```bash
+volta install node
+```
+
+#### 2. 使用 npm 安裝依賴
+
+```bash
+npm install
+```
 
 
-#### 2. 執行 `volta install pnpm`。（如果專案的 `package.json` 已經固定了 pnpm 版本，則這一步不是必須的；直接執行 `pnpm` 指令即可觸發自動安裝）
-
-
-
-## 檢查已安裝的 Node 和 pnpm 版本
+## 檢查已安裝的 Node 和 npm 版本
 
 ```bash
 volta list all
@@ -48,5 +49,5 @@ node -v
 ```
 
 ```bash
-pnpm -v
+npm -v
 ```
