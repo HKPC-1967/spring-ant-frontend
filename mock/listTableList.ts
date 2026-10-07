@@ -1,6 +1,6 @@
+import { parse } from 'node:url';
 import dayjs from 'dayjs';
-import { Request, Response } from 'express';
-import { parse } from 'url';
+import type { Request, Response } from 'express';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
@@ -53,8 +53,8 @@ function getRule(req: Request, res: Response, u: string) {
     dataSource = dataSource.sort((prev, next) => {
       let sortNumber = 0;
       (Object.keys(sorter) as Array<keyof API.RuleListItem>).forEach((key) => {
-        let nextSort = next?.[key] as number;
-        let preSort = prev?.[key] as number;
+        const nextSort = next?.[key] as number;
+        const preSort = prev?.[key] as number;
         if (sorter[key] === 'descend') {
           if (preSort - nextSort > 0) {
             sortNumber += -1;
@@ -106,16 +106,10 @@ function getRule(req: Request, res: Response, u: string) {
 }
 
 function postRule(req: Request, res: Response, u: string, b: Request) {
-  let realUrl = u;
-  if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
-    realUrl = req.url;
-  }
-
-  const body = (b && b.body) || req.body;
+  const body = b?.body || req.body;
   const { method, name, desc, key } = body;
 
   switch (method) {
-    /* eslint no-case-declarations:0 */
     case 'delete':
       tableListDataSource = tableListDataSource.filter((item) => key.indexOf(item.key) === -1);
       break;

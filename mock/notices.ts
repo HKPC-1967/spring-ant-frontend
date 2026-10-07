@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
-const getNotices = (req: Request, res: Response) => {
+const getNotices = (_req: Request, res: Response) => {
   res.json({
     data: [
       {

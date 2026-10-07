@@ -1,11 +1,30 @@
 // https://umijs.org/config/
+
+import { join } from 'node:path';
 import { defineConfig } from '@umijs/max';
-import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
+
 import routes from './routes';
 
-const { REACT_APP_ENV = 'dev' } = process.env;
+const { UMI_ENV = 'dev' } = process.env;
+
+// Compute commit hash: env vars take precedence, fall back to git at build time
+const commitHash =
+  process.env.COMMIT_HASH ||
+  process.env.CF_PAGES_COMMIT_SHA ||
+  (() => {
+    try {
+      return require('node:child_process')
+        .execSync('git rev-parse HEAD', {
+          stdio: ['ignore', 'pipe', 'ignore'],
+          encoding: 'utf-8',
+        })
+        .trim();
+    } catch {
+      return '';
+    }
+  })();
 
 /**
  * @name 使用公共路径
@@ -15,6 +34,9 @@ const { REACT_APP_ENV = 'dev' } = process.env;
 const PUBLIC_PATH: string = '/';
 
 export default defineConfig({
+  alias: {
+    '@root': join(__dirname, '..'),
+  },
   /**
    * @name 开启 hash 模式
    * @description 让 build 之后的产物包含 hash 后缀。通常用于增量发布和避免浏览器加载缓存。
@@ -43,13 +65,9 @@ export default defineConfig({
    * @name 主题的配置
    * @description 虽然叫主题，但是其实只是 less 的变量设置
    * @doc antd的主题设置 https://ant.design/docs/react/customize-theme-cn
-   * @doc umi 的theme 配置 https://umijs.org/docs/api/config#theme
+   * @doc umi 的 theme 配置 https://umijs.org/docs/api/config#theme
    */
-  theme: {
-    // 如果不想要 configProvide 动态设置主题需要把这个设置为 default
-    // 只有设置为 variable， 才能使用 configProvide 动态设置主色调
-    'root-entry-name': 'variable',
-  },
+  // theme: { '@primary-color': '#1DA57A' }
   /**
    * @name moment 的国际化配置
    * @description 如果对国际化没有要求，打开之后能减少js的包大小
@@ -63,12 +81,23 @@ export default defineConfig({
    * @doc 代理介绍 https://umijs.org/docs/guides/proxy
    * @doc 代理配置 https://umijs.org/docs/api/config#proxy
    */
-  proxy: proxy[REACT_APP_ENV as keyof typeof proxy],
+  proxy: proxy[UMI_ENV as keyof typeof proxy],
   /**
    * @name 快速热更新配置
    * @description 一个不错的热更新组件，更新时可以保留 state
    */
   fastRefresh: true,
+  /**
+   * @name 路由预加载
+   * @description 预加载路由资源，提升页面切换速度
+   * @doc https://umijs.org/docs/api/config#routePrefetch
+   */
+  routePrefetch: {},
+  /**
+   * @name manifest 配置
+   * @description 生成资源清单，配合 routePrefetch 使用
+   */
+  manifest: {},
   //============== 以下都是max的插件配置 ===============
   /**
    * @name 数据流插件
@@ -97,7 +126,7 @@ export default defineConfig({
    */
   moment2dayjs: {
     preset: 'antd',
-    plugins: ['duration'],
+    plugins: ['duration', 'relativeTime'],
   },
   /**
    * @name 国际化插件
@@ -115,7 +144,17 @@ export default defineConfig({
    * @description 内置了 babel import 插件
    * @doc https://umijs.org/docs/max/antd#antd
    */
-  antd: {},
+  antd: {
+    appConfig: {},
+    configProvider: {
+      variant: 'filled',
+      theme: {
+        token: {
+          fontFamily: 'AlibabaSans, sans-serif',
+        },
+      },
+    },
+  },
   /**
    * @name 网络请求配置
    * @description 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
@@ -123,11 +162,25 @@ export default defineConfig({
    */
   request: {},
   /**
+   * @name React Query 插件
+   * @description 使用 react-query 管理服务端状态
+   * @doc https://umijs.org/docs/max/react-query
+   */
+  reactQuery: {},
+  /**
    * @name 权限插件
    * @description 基于 initialState 的权限插件，必须先打开 initialState
    * @doc https://umijs.org/docs/max/access
    */
   access: {},
+  /**
+   * @name Google Analytics
+   * @description 使用 GA4 (gtag.js) 进行站点分析
+   * @doc https://umijs.org/docs/max/analytics
+   */
+  analytics: {
+    ga_v2: 'G-59NF1VHHPF',
+  },
   /**
    * @name <head> 中额外的 script
    * @description 配置 <head> 中额外的 script
@@ -136,8 +189,10 @@ export default defineConfig({
     // 解决首次加载时白屏的问题
     { src: join(PUBLIC_PATH, 'scripts/loading.js'), async: true },
   ],
+
   //================ pro 插件配置 =================
-  presets: ['umi-presets-pro'],
+  plugins: ['@umijs/max-plugin-openapi', '@umijs/request-record'],
+
   /**
    * @name openAPI 插件的配置
    * @description 基于 openapi 的规范生成serve 和mock，能减少很多样板代码
@@ -151,18 +206,31 @@ export default defineConfig({
       schemaPath: join(__dirname, 'oneapi.json'),
       mock: false,
     },
-    {
-      requestLibPath: "import { request } from '@umijs/max'",
-      schemaPath: 'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
-      projectName: 'swagger',
-    },
   ],
-  /**
-   * @name 是否开启 mako
-   * @description 使用 mako 极速研发
-   * @doc https://umijs.org/docs/api/config#mako
-   */
-  mako: {},
-  esbuildMinifyIIFE: true,
+
+  tailwindcss: {},
+
+  mock: {
+    include: ['src/pages/**/_mock.ts'],
+    exclude: ['mock/requestRecord.mock.js'],
+  },
+  utoopack: {
+    module: {
+      rules: {
+        '*.md': {
+          loaders: [{ loader: join(__dirname, 'md-raw-loader.cjs') }],
+          as: '*.js',
+        },
+      },
+    },
+  },
   requestRecord: {},
+  exportStatic: {},
+  define: {
+    'process.env.CI': process.env.CI,
+    'process.env.COMMIT_HASH': commitHash,
+    __APP_VERSION__: require('./../package.json').version,
+    __UMI_VERSION__: require('@umijs/max/package.json').version,
+    __UTOO_VERSION__: require('@utoo/pack/package.json').version,
+  },
 });

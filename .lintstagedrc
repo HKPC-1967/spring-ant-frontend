@@ -1,6 +1,8 @@
 {
-  "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
-  "**/*.{js,jsx,tsx,ts,less,md,json,yml}": [
-    "prettier --write"
+  "**/*.{js,jsx,tsx,ts,css,less}": [
+    "npx @biomejs/biome check --write"
+  ],
+  "src/**/*.md": [
+    "npx @biomejs/biome check --write"
   ]
 }
