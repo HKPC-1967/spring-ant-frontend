@@ -1,145 +1,83 @@
-import { stringify } from 'node:querystring';
-import {
-  LogoutOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Spin } from 'antd';
-import { createStyles } from 'antd-style';
-import React from 'react';
-import { flushSync } from 'react-dom';
+import React, { startTransition } from 'react';
 import { outLogin } from '@/services/ant-design-pro/api';
-import localStorageUtil from '@/utils/localStorageUtil';
 import HeaderDropdown from '../HeaderDropdown';
 
-export type GlobalHeaderRightProps = {
-  menu?: boolean;
+type GlobalHeaderRightProps = {
   children?: React.ReactNode;
 };
 
-export const AvatarName = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  return <span className="anticon">{currentUser?.name}</span>;
+const menuItems: MenuProps['items'] = [
+  {
+    key: 'logout',
+    icon: <LogoutOutlined />,
+    label: '退出登录',
+  },
+];
+
+const loginOut = async () => {
+  try {
+    await outLogin();
+  } catch {
+    // Local logout has already cleared user state; redirect should still proceed.
+  }
+  const { search, pathname } = window.location;
+  const urlParams = new URL(window.location.href).searchParams;
+  const searchParams = new URLSearchParams({
+    redirect: pathname + search,
+  });
+  const redirect = urlParams.get('redirect');
+  if (window.location.pathname !== '/user/login' && !redirect) {
+    history.replace({
+      pathname: '/user/login',
+      search: searchParams.toString(),
+    });
+  }
 };
 
-const useStyles = createStyles(({ token }) => {
-  return {
-    action: {
-      display: 'flex',
-      height: '48px',
-      marginLeft: 'auto',
-      overflow: 'hidden',
-      alignItems: 'center',
-      padding: '0 8px',
-      cursor: 'pointer',
-      borderRadius: token.borderRadius,
-      '&:hover': {
-        backgroundColor: token.colorBgTextHover,
-      },
-    },
-  };
-});
-
 export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
-  menu,
   children,
 }) => {
-  /**
-   * 退出登录，并且将当前的 url 保存
-   */
-  const loginOut = async () => {
-    try {
-      await outLogin();
-    } catch (error) {
-      console.log('log out:', error);
-    } finally {
-      localStorageUtil.removeAllJwtToken();
-      const { search, pathname } = window.location;
-      const urlParams = new URL(window.location.href).searchParams;
-      const redirect = urlParams.get('redirect');
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: pathname + search,
-          }),
-        });
-      }
-    }
-  };
-  const { styles } = useStyles();
-
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const onMenuClick: MenuProps['onClick'] = (event) => {
     const { key } = event;
     if (key === 'logout') {
-      flushSync(() => {
+      startTransition(() => {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
       });
       loginOut();
       return;
     }
+    if (key === 'theme') {
+      setInitialState((s) => ({ ...s, settingDrawerOpen: true }));
+      return;
+    }
     history.push(`/account/${key}`);
   };
 
-  const loading = (
-    <span className={styles.action}>
-      <Spin
-        size="small"
-        style={{
-          marginLeft: 8,
-          marginRight: 8,
-        }}
-      />
-    </span>
-  );
-
   if (!initialState) {
-    return loading;
+    return <Spin size="small" />;
   }
 
   const { currentUser } = initialState;
 
-  if (!currentUser?.name) {
-    return loading;
+  if (!currentUser) {
+    return <Spin size="small" />;
   }
-
-  const menuItems = [
-    ...(menu
-      ? [
-          {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
-          },
-          {
-            type: 'divider' as const,
-          },
-        ]
-      : []),
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: '退出登录',
-    },
-  ];
 
   return (
     <HeaderDropdown
+      placement="bottomRight"
       menu={{
         selectedKeys: [],
         onClick: onMenuClick,
         items: menuItems,
       }}
+      arrow
     >
       {children}
     </HeaderDropdown>

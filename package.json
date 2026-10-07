@@ -22,10 +22,6 @@
     "start:no-mock": "cross-env MOCK=none max dev",
     "start:pre": "cross-env UMI_ENV=pre MOCK=none max dev",
     "start:test": "cross-env UMI_ENV=test MOCK=none max dev",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
     "doctor": "react-doctor .",
     "tsc": "tsc --noEmit"
   },
@@ -61,8 +57,6 @@
     "@umijs/lint": "^4.7.3",
     "@umijs/max": "^4.7.3",
     "@umijs/request-record": "^1.1.4",
-    "@vitest/coverage-v8": "4.1.10",
-    "@vitest/ui": "4.1.10",
     "cross-env": "^10.1.0",
     "express": "^5.2.1",
     "gh-pages": "^6.3.0",
@@ -73,8 +67,7 @@
     "react-doctor": "^0.9.11",
     "tailwindcss": "^4.3.2",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2",
-    "vitest": "4.1.10"
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "@umijs/plugins": {
