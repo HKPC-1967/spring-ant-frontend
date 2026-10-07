@@ -21,12 +21,24 @@ declare namespace API {
     };
     address?: string;
     phone?: string;
+    roleIds: number[];
   };
 
   type LoginResult = {
     status?: string;
     type?: string;
-    currentAuthority?: string;
+    // currentAuthority?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpiration?: string;
+    refreshTokenExpiration?: string;
+  };
+
+  /** backend response format */
+  type BeResponseLoginResult = {
+    data: LoginResult;
+    errorCode: string;
+    success: boolean;
   };
 
   type PageParams = {
@@ -54,6 +66,20 @@ declare namespace API {
     /** 列表的内容总数 */
     total?: number;
     success?: boolean;
+  };
+
+  /** backend PageInfo class format */
+  type BePage = {
+    list: RuleListItem[];
+    /** 列表的内容总数 */
+    total: number;
+  };
+
+  /** backend response format */
+  type BeResponse = {
+    data: BePage;
+    errorCode: string;
+    success: boolean;
   };
 
   type FakeCaptcha = {

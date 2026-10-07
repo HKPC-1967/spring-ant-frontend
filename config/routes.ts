@@ -4,7 +4,7 @@ export default [
     layout: false,
     routes: [
       {
-        name: '登录',
+        name: 'login',
         path: '/user/login',
         component: './user/login',
       },
@@ -12,15 +12,15 @@ export default [
   },
   {
     path: '/welcome',
-    name: '欢迎',
+    name: 'welcome',
     icon: 'smile',
     component: './Welcome',
   },
   {
     path: '/admin',
-    name: '管理页',
+    name: 'admin',
     icon: 'crown',
-    access: 'canAdmin',
+    access: 'roleAdmin',
     routes: [
       {
         path: '/admin',
@@ -28,13 +28,13 @@ export default [
       },
       {
         path: '/admin/sub-page',
-        name: '二级管理页',
+        name: 'sub-page',
         component: './Admin',
       },
     ],
   },
   {
-    name: '查询表格',
+    name: 'list.table-list',
     icon: 'table',
     path: '/list',
     component: './table-list',
@@ -44,8 +44,31 @@ export default [
     redirect: '/welcome',
   },
   {
-    component: './exception/404',
-    layout: false,
     path: './*',
+    layout: false,
+    component: './exception/404',
+  },
+
+  {
+    path: '/rbac',
+    name: 'rbac-test-page',
+    icon: 'folderOpen',
+    routes: [
+      {
+        path: '/rbac',
+        redirect: '/rbac/common',
+      },
+      {
+        path: '/rbac/admin',
+        name: 'admin-page',
+        access: 'roleAdmin',
+        component: './rbac/admin',
+      },
+      {
+        path: '/rbac/common',
+        name: 'common-page',
+        component: './rbac/common',
+      },
+    ],
   },
 ];

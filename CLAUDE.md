@@ -8,11 +8,8 @@ Ant Design Pro — React enterprise boilerplate on Umi Max v4, antd v6, ProCompo
 
 `npm start` (dev+mock), `npm run dev` (no mock), `npm run build` (utoopack), `npm run lint` (Biome+tsc), `npm run test` (Jest), `npx antd lint ./src` (antd-specific checks).
 
-Other: `npm run openapi` (regenerate `src/services/`), `npm run simple` (**irreversible** — commit first), `npm run biome` (auto-fix), `npm run tsc` (type-check only).
-
 ## Critical Rules
 
-- **Never edit `src/services/ant-design-pro/`** — auto-generated, regenerate with `npm run openapi`
 - **Biome only** — no ESLint, no Prettier. Both `npm run lint` and `npx antd lint ./src` must pass before commit
 - **Always `npx antd info <Component>` before writing antd code** — don't guess APIs from memory
 - **`npm run simple` is irreversible** — always commit/branch first

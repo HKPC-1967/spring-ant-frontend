@@ -7,7 +7,7 @@ import proxy from './proxy';
 
 import routes from './routes';
 
-const { UMI_ENV = 'dev' } = process.env;
+const { UMI_ENV = 'dev', ENABLE_REFRESH_TOKEN = true } = process.env;
 
 // Compute commit hash: env vars take precedence, fall back to git at build time
 const commitHash =
@@ -37,6 +37,7 @@ export default defineConfig({
   alias: {
     '@root': join(__dirname, '..'),
   },
+
   /**
    * @name 开启 hash 模式
    * @description 让 build 之后的产物包含 hash 后缀。通常用于增量发布和避免浏览器加载缓存。
@@ -191,29 +192,10 @@ export default defineConfig({
   ],
 
   //================ pro 插件配置 =================
-  plugins: ['@umijs/max-plugin-openapi', '@umijs/request-record'],
-
-  /**
-   * @name openAPI 插件的配置
-   * @description 基于 openapi 的规范生成serve 和mock，能减少很多样板代码
-   * @doc https://pro.ant.design/zh-cn/docs/openapi/
-   */
-  openAPI: [
-    {
-      requestLibPath: "import { request } from '@umijs/max'",
-      // 或者使用在线的版本
-      // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
-      schemaPath: join(__dirname, 'oneapi.json'),
-      mock: false,
-    },
-  ],
+  plugins: ['@umijs/request-record'],
 
   tailwindcss: {},
 
-  mock: {
-    include: ['src/pages/**/_mock.ts'],
-    exclude: ['mock/requestRecord.mock.js'],
-  },
   utoopack: {
     module: {
       rules: {
@@ -227,6 +209,7 @@ export default defineConfig({
   requestRecord: {},
   exportStatic: {},
   define: {
+    ENABLE_REFRESH_TOKEN,
     'process.env.CI': process.env.CI,
     'process.env.COMMIT_HASH': commitHash,
     __APP_VERSION__: require('./../package.json').version,

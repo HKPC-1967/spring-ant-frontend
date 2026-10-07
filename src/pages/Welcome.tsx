@@ -1,206 +1,164 @@
 import { PageContainer } from '@ant-design/pro-components';
-import XMarkdown from '@ant-design/x-markdown';
-import '@ant-design/x-markdown/es/XMarkdown/index.css';
-import enUS from '@root/docs/cheatsheet.en-US.md';
-import zhCN from '@root/docs/cheatsheet.zh-CN.md';
-import { getLocale, useIntl, useModel } from '@umijs/max';
-import { Card } from 'antd';
-import hljs from 'highlight.js';
+import { useModel } from '@umijs/max';
+import { Card, theme } from 'antd';
 import React from 'react';
 
-import 'highlight.js/styles/github.css';
-import './Welcome.css';
-import './Welcome-dark.css';
-
-interface InfoCardProps {
+/**
+ * 每个单独的卡片，为了复用样式抽成了组件
+ * @param param0
+ * @returns
+ */
+const InfoCard: React.FC<{
   title: string;
   index: number;
   desc: string;
   href: string;
-}
+}> = ({ title, href, index, desc }) => {
+  const { useToken } = theme;
 
-const InfoCard: React.FC<InfoCardProps> = ({ title, index, desc, href }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" aria-label={title}>
-    <Card hoverable size="small">
-      <div className="flex items-start gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#1677ff] text-base font-bold text-white">
+  const { token } = useToken();
+
+  return (
+    <div
+      style={{
+        backgroundColor: token.colorBgContainer,
+        boxShadow: token.boxShadow,
+        borderRadius: '8px',
+        fontSize: '14px',
+        color: token.colorTextSecondary,
+        lineHeight: '22px',
+        padding: '16px 19px',
+        minWidth: '220px',
+        flex: 1,
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          gap: '4px',
+          alignItems: 'center',
+        }}
+      >
+        <div
+          style={{
+            width: 48,
+            height: 48,
+            lineHeight: '22px',
+            backgroundSize: '100%',
+            textAlign: 'center',
+            padding: '8px 16px 16px 12px',
+            color: '#FFF',
+            fontWeight: 'bold',
+            backgroundImage:
+              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
+          }}
+        >
           {index}
         </div>
-        <div className="min-w-0 flex-1">
-          <h4 className="mb-1 mt-0 text-sm font-semibold">{title}</h4>
-          <p className="mb-0 line-clamp-2 text-xs text-zinc-500">{desc}</p>
+        <div
+          style={{
+            fontSize: '16px',
+            color: token.colorText,
+            paddingBottom: 8,
+          }}
+        >
+          {title}
         </div>
       </div>
-    </Card>
-  </a>
-);
-
-const mdContent: Record<string, string> = {
-  'zh-CN': zhCN,
-  'en-US': enUS,
-};
-
-// XMarkdown Renderer passes class names via non-standard props
-interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  tag?: string;
-  domNode?: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  classname?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  class?: any;
-}
-
-const Heading: React.FC<HeadingProps> = ({
-  tag: Tag = 'h1',
-  children,
-  className,
-  classname,
-  class: htmlClass,
-}) => {
-  // Merge all possible class sources from XMarkdown Renderer
-  const allClasses = [className, classname, htmlClass]
-    .filter(Boolean)
-    .join(' ');
-  // Extract text content from children for id generation
-  const textContent = React.Children.toArray(children)
-    .map((child) => (typeof child === 'string' ? child : ''))
-    .join('');
-  const id = textContent
-    .replace(/[^\w\s一-鿿-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .toLowerCase();
-  const mergedClass = `heading-anchor ${allClasses}`.trim();
-  return (
-    // @ts-expect-error dynamic tag
-    <Tag id={id} className={mergedClass}>
-      <a href={`#${id}`} className="anchor-link">
-        #
+      <div
+        style={{
+          fontSize: '14px',
+          color: token.colorTextSecondary,
+          textAlign: 'justify',
+          lineHeight: '22px',
+          marginBottom: 8,
+        }}
+      >
+        {desc}
+      </div>
+      <a href={href} target="_blank" rel="noreferrer">
+        了解更多 {'>'}
       </a>
-      {children}
-    </Tag>
+    </div>
   );
 };
 
-const mdComponents = {
-  h1: (props: HeadingProps) => <Heading tag="h1" {...props} />,
-  h2: (props: HeadingProps) => <Heading tag="h2" {...props} />,
-  h3: (props: HeadingProps) => <Heading tag="h3" {...props} />,
-  h4: (props: HeadingProps) => <Heading tag="h4" {...props} />,
-};
-
-const mdConfig = {
-  renderer: {
-    code({ text, lang }: { text: string; lang?: string }) {
-      const langString = (lang || '').trim();
-      let highlighted: string;
-      if (langString && hljs.getLanguage(langString)) {
-        highlighted = hljs.highlight(text.replace(/\n$/, ''), {
-          language: langString,
-        }).value;
-      } else {
-        highlighted = hljs.highlightAuto(text.replace(/\n$/, '')).value;
-      }
-      const classAttr = langString
-        ? ` class="hljs language-${langString}"`
-        : ' class="hljs"';
-      return `<pre><code${classAttr}>${highlighted}\n</code></pre>\n`;
-    },
-  },
-};
-
-const infoCards = [
-  {
-    index: 1,
-    href: 'https://umijs.org/docs/introduce/introduce',
-    titleId: 'pages.welcome.infoCard.umi.title',
-    titleDefault: 'Learn umi',
-    descId: 'pages.welcome.infoCard.umi.desc',
-    descDefault:
-      'umi is an extensible enterprise-level frontend framework based on routing, supporting both config-based and convention-based routes.',
-  },
-  {
-    index: 2,
-    href: 'https://ant.design',
-    titleId: 'pages.welcome.infoCard.antd.title',
-    titleDefault: 'Learn Ant Design',
-    descId: 'pages.welcome.infoCard.antd.desc',
-    descDefault:
-      'antd is a React UI component library based on the Ant Design system, mainly for enterprise-level mid-end products.',
-  },
-  {
-    index: 3,
-    href: 'https://procomponents.ant.design',
-    titleId: 'pages.welcome.infoCard.procomponents.title',
-    titleDefault: 'Learn Pro Components',
-    descId: 'pages.welcome.infoCard.procomponents.desc',
-    descDefault:
-      'ProComponents provides higher-abstraction template components on top of Ant Design, with one-component-one-page philosophy.',
-  },
-] as const;
-
 const Welcome: React.FC = () => {
-  const intl = useIntl();
-  const locale = getLocale();
-  const normalizedLocale = locale.toLowerCase();
-  const content =
-    mdContent[locale] ??
-    (normalizedLocale.startsWith('zh')
-      ? mdContent['zh-CN']
-      : mdContent['en-US']);
+  const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
-  const isDark = initialState?.settings?.navTheme === 'realDark';
-
   return (
-    <PageContainer
-      title={
-        <>
-          {intl.formatMessage(
-            {
-              id: 'pages.welcome.celebrationTitle',
-              defaultMessage: '欢迎使用 Ant Design Pro {v6}',
-            },
-            {
-              v6: (
-                <span key="v6" className="welcome-gradient-title">
-                  V6
-                </span>
-              ),
-            },
-          )}
-          🎉
-        </>
-      }
-    >
-      <div
-        data-theme={isDark ? 'dark' : 'light'}
-        className="flex flex-col gap-6 md:flex-row"
+    <PageContainer>
+      <Card
+        style={{
+          borderRadius: 8,
+        }}
+        styles={{
+          body: {
+            backgroundImage:
+              initialState?.settings?.navTheme === 'realDark'
+                ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
+                : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
+          },
+        }}
       >
-        <div className="min-w-0 md:flex-[2] welcome-markdown">
-          <Card>
-            <XMarkdown components={mdComponents} config={mdConfig}>
-              {content}
-            </XMarkdown>
-          </Card>
-        </div>
-        <div className="flex flex-1 flex-col gap-4">
-          {infoCards.map((card) => (
+        <div
+          style={{
+            backgroundPosition: '100% -30%',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '274px auto',
+            backgroundImage:
+              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+          }}
+        >
+          <div
+            style={{
+              fontSize: '20px',
+              color: token.colorTextHeading,
+            }}
+          >
+            欢迎使用 Ant Design Pro
+          </div>
+          <p
+            style={{
+              fontSize: '14px',
+              color: token.colorTextSecondary,
+              lineHeight: '22px',
+              marginTop: 16,
+              marginBottom: 32,
+              width: '65%',
+            }}
+          >
+            Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
+            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 16,
+            }}
+          >
             <InfoCard
-              key={card.href}
-              index={card.index}
-              href={card.href}
-              title={intl.formatMessage({
-                id: card.titleId,
-                defaultMessage: card.titleDefault,
-              })}
-              desc={intl.formatMessage({
-                id: card.descId,
-                defaultMessage: card.descDefault,
-              })}
+              index={1}
+              href="https://umijs.org/docs/introduce/introduce"
+              title="了解 umi"
+              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
             />
-          ))}
+            <InfoCard
+              index={2}
+              title="了解 ant design"
+              href="https://ant.design"
+              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
+            />
+            <InfoCard
+              index={3}
+              title="了解 Pro Components"
+              href="https://procomponents.ant.design"
+              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
+            />
+          </div>
         </div>
-      </div>
+      </Card>
     </PageContainer>
   );
 };

@@ -6,6 +6,6 @@ export default function access(
 ) {
   const { currentUser } = initialState ?? {};
   return {
-    canAdmin: currentUser && currentUser.access === 'admin',
+    roleAdmin: currentUser?.roleIds?.includes(1) || false,
   };
 }

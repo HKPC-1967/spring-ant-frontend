@@ -1,27 +1,25 @@
-import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
+import { App, ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
-
-// Initialize dayjs plugins globally
-dayjs.extend(relativeTime);
-
+import type { ReactNode } from 'react';
 import {
   AvatarDropdown,
-  DocLink,
-  ErrorBoundary,
   Footer,
-  LangDropdown,
-  OfflineBanner,
-  VersionDropdown,
+  Message,
+  Question,
+  SelectLang,
 } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
+import { LoadingProvider } from './api_core/components/LoadingContext';
 import { errorConfig } from './requestErrorConfig';
+
+// Initialize dayjs plugins globally
+dayjs.extend(relativeTime);
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -88,17 +86,10 @@ export const layout: RunTimeLayoutConfig = ({
       }
       return dom;
     },
-    actionsRender: () => {
-      // `locale: false` opts out of the language switcher. ProLayout's own
-      // `locale` prop is a locale string, so narrow to the boolean toggle here.
-      const localeEnabled =
-        (initialState?.settings as { locale?: boolean })?.locale !== false;
-      return [
-        <DocLink key="doc" />,
-        <VersionDropdown key="version" />,
-        localeEnabled && <LangDropdown key="lang" />,
-      ].filter(Boolean);
-    },
+    actionsRender: () => [
+      <Question key="doc" />,
+      <SelectLang key="SelectLang" />,
+    ],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
       title: 'ProUser',
@@ -139,17 +130,7 @@ export const layout: RunTimeLayoutConfig = ({
         width: '331px',
       },
     ],
-    links: isDev
-      ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-        ]
-      : [],
-    // Replace ProLayout's default ErrorBoundary with our offline-aware version,
-    // so chunk load errors show friendly messages instead of "Something went wrong."
-    ErrorBoundary,
+    links: [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -194,11 +175,13 @@ export const request: RequestConfig = {
   ...errorConfig,
 };
 
-export function rootContainer(container: React.ReactNode) {
-  return (
-    <>
-      <OfflineBanner />
-      <ErrorBoundary>{container}</ErrorBoundary>
-    </>
-  );
-}
+export const rootContainer = (root: ReactNode) => (
+  <ConfigProvider>
+    <LoadingProvider>
+      <App>
+        <Message />
+        {root}
+      </App>
+    </LoadingProvider>
+  </ConfigProvider>
+);

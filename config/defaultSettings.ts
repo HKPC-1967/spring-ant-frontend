@@ -7,14 +7,16 @@ const Settings: ProLayoutProps & {
   logo?: string;
 } = {
   navTheme: 'light',
-  colorPrimary: '#1677ff',
+  // 拂晓蓝
+  colorPrimary: '#1890ff',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  title: 'Spring Ant',
+  pwa: true,
+  logo: 'logo.png',
   iconfontUrl: '',
   token: {
     // 参见ts声明，demo 见文档，通过token 修改样式

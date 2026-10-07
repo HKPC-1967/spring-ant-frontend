@@ -1,164 +1,101 @@
-<h1 align="center">Ant Design Pro</h1>
+Language : [简体中文](README.zh-CN.md) | [繁體中文](README.zh-HK.md)
 
-<div align="center">
+## Spring Ant Frontend (Frontend of [Spring Ant Family](https://github.com/HKPC-1967/spring-ant))
 
-An out-of-box UI solution for enterprise applications as a React boilerplate.
+Spring Ant Frontend is based on [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro), an out-of-the-box UI solution for enterprise applications，and the best React framework we've found for admin-panel web applications.  
+Preview the original Ant Design Pro features here: [Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis).  
+We enhanced the base project with:
 
-[![CI](https://github.com/ant-design/ant-design-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-pro/actions/workflows/ci.yml)
-[![GitHub release](https://img.shields.io/github/v/release/ant-design/ant-design-pro.svg)](https://github.com/ant-design/ant-design-pro/releases)
-[![Build With Utoo](https://img.shields.io/badge/build%20with-utoo-028fe4.svg)](https://utoo.land)
-[![Build With Umi](https://img.shields.io/badge/build%20with-umi-028fe4.svg)](https://umijs.org/)
-[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
-[![Ant Design](https://badgen.net/badge/icon/Ant%20Design?icon=https://gw.alipayobjects.com/zos/antfincdn/Pp4WPgVDB3/KDpgvguMpGfqaHPjicRK.svg&label)](https://ant.design/)
+- Unified HTTP payload format for consistent communication with [Spring Ant Backend](https://github.com/HKPC-1967/spring-ant). [requestErrorConfig.ts](src/requestErrorConfig.ts)
+- Loading state management (loading spinners and a loading overlay to prevent user interaction while requests are in progress). [LoadingContext.tsx](src/api_core/components/LoadingContext.tsx)
+- Unified error handling based on `errorCode` and `showType`; Network and HTTP-level errors are also handled uniformly. [requestErrorConfig.ts](src/requestErrorConfig.ts) [MessageProvider.tsx](src/api_core/components/MessageProvider.tsx) [errorCode.ts](src/locales/en-US/errorCode.ts)
+- JWT-based authentication (access token and refresh token). [localStorageUtil.ts](src/utils/localStorageUtil.ts) [refreshTokenUtil.ts](src/utils/refreshTokenUtil.ts)
+- RBAC (Role-Based Access Control) integration with the backend. [access.ts](src/access.ts) [routes.ts](config/routes.ts)
+- Docker support with multi-stage builds. [Dockerfile](Dockerfile)
 
-Language: English | [简体中文](./README.zh-CN.md)
+You can compare the `main` branch with `original_ant_design_pro_code/release_v6.0.0-beta.1` to review all custom enhancements on top of the original Ant Design Pro codebase.  
+This project is the frontend part of the [Spring Ant Family](https://github.com/HKPC-1967/spring-ant).
 
-<img width="1718" height="1191" alt="light theme preview" src="https://github.com/user-attachments/assets/74ad0b4a-e086-4955-8edd-9f2cff31aee8" />
-<img width="1718" height="1191" alt="dark theme preview" src="https://github.com/user-attachments/assets/d4bcb7c1-42c7-4c0f-b130-1193a931f9f7" />
+## Environment Preparation (Node.js and PNPM)
 
-</div>
+> The Node.js and PNPM versions used by this project are defined in the `volta` object in `package.json`. We recommend keeping versions aligned to avoid compatibility issues.
 
-- Preview: https://preview.pro.ant.design
-- Documentation: [docs/cheatsheet.en-US.md](./docs/cheatsheet.en-US.md)
-- ChangeLog: https://github.com/ant-design/ant-design-pro/releases
-- FAQ: [docs/cheatsheet.en-US.md#faq](./docs/cheatsheet.en-US.md#faq)
-- **v6 Released!** — [What's new in v6](https://github.com/ant-design/ant-design-pro/releases/tag/v6.0.0)
+### Option 1: [Use Volta](./readme/volta.md) (recommended; manages Node.js and PNPM versions across multiple projects)
 
-## Features
+### Option 2: Without Volta (use this for a quick start if you are not familiar with Volta, but keep the Node.js major version consistent)
 
-- :bulb: **TypeScript**: A language for application-scale JavaScript
-- :scroll: **Blocks**: Build page with block template
-- :gem: **Neat Design**: Built on [Ant Design 6](https://ant.design/) specification
-- :triangular_ruler: **Common Templates**: Typical templates for enterprise applications
-- :rocket: **State of The Art Development**: Newest development stack of React 19/[Umi Max 4](https://umijs.org/)/[antd 6](https://ant.design/)/[utoopack](https://utoo.land)
-- :iphone: **Responsive**: Designed for variable screen sizes
-- :art: **Theming**: Customizable theme with [Tailwind CSS v4](https://tailwindcss.com/) + [antd-style](https://github.com/ant-design/antd-style)
-- :globe_with_meridians: **International**: Built-in i18n solution
-- :gear: **Best Practices**: Solid workflow to make your code healthy
-- :1234: **Mock development**: Easy to use mock development solution
-- :robot: **AI Assistant**: Built-in AI chatbot page powered by [Ant Design X](https://x.ant.design/)
-- :white_check_mark: **UI Test**: Fly safely with unit and e2e tests
-
-## Templates
-
-```
-- Welcome
-- Dashboard
-  - Analysis
-  - Monitor
-  - Workplace
-- Form
-  - Basic Form
-  - Step Form
-  - Advanced Form
-- List
-  - Search List (Articles/Projects/Applications)
-  - Table List
-  - Basic List
-  - Card List
-- Profile
-  - Basic Profile
-  - Advanced Profile
-- Result
-  - Success
-  - Fail
-- Exception
-  - 403
-  - 404
-  - 500
-- Account
-  - Account Center
-  - Account Settings
-- AI Assistant
-- User
-  - Login
-  - Register
-  - Register Result
-```
-
-## Usage
-
-### Get Started
-
-Clone or download this repository to your local machine:
+Check the Node.js version:
 
 ```bash
-git clone --depth=1 https://github.com/ant-design/ant-design-pro.git myapp
-cd myapp
+node --version
 ```
 
-### Installation
+Install `pnpm`:
 
 ```bash
-npm install
+npm install pnpm -g
 ```
 
-### Development
+Check the `pnpm` version:
 
 ```bash
-# Start development server (full version by default)
-npm start
+pnpm --version
 ```
 
-### Simplify to Simple Version
-
-This project includes all blocks by default. If you need a minimal version, run:
+Install dependencies:
 
 ```bash
-npm run simple
+pnpm install
 ```
 
-This will:
-- Remove extra page directories (dashboard, form, list/*, profile, result, exception, account, etc.)
-- Remove extra mock files
-- Replace routes with simple version
-- Remove extra dependencies from package.json
+## PNPM Scripts
 
-**Note**: This operation is irreversible and will permanently delete files.
+Scripts are defined in [package.json](package.json).
 
-### Build
+### Run locally with hot reload for development (env: `config.dev.ts`)
+
+`config.${UMI_ENV}.ts` official guide: https://umijs.org/docs/guides/env-variables#umi_env
+
+> **Note**: If you use `pnpm start`, `REACT_APP_ENV` will be `false` instead of `dev`.
 
 ```bash
-npm run build
+pnpm run start:dev
 ```
 
-## AI Skills (Claude Code)
+### Build the project
 
-This project ships with two built-in [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills) in `.claude/skills/`:
-
-| Skill | Trigger | Description |
-|---|---|---|
-| `/pro-upgrade` | "upgrade pro", "update to latest" | Auto-upgrade to the latest Ant Design Pro version. Diffs the latest template, merges framework changes while preserving your business code. |
-| `/antd` | antd-related code or questions | Query antd component APIs, props, tokens, demos; lint for deprecated usage; migrate between versions — all via `@ant-design/cli`. |
-
-**Usage in Claude Code:**
+- Build for test (env: `config.test.ts`)
 
 ```bash
-# Upgrade the project to latest Pro version
-/pro-upgrade
-
-# Query antd component info, debug issues, run lint, etc.
-/antd
+pnpm run build:test
 ```
 
-> 💡 If your project was cloned from this repo, these skills are already included — no installation needed. To get the latest skill definitions, pull the updates from the template or run `npx skills add ant-design/ant-design-pro` to refresh them.
+- Build for production (env: `config.ts`)
 
-## Browsers support
+```bash
+pnpm run build
+```
 
-Modern browsers.
+## Docker Scripts
 
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --- | --- | --- | --- |
-| Edge | last 2 versions | last 2 versions | last 2 versions |
+### Docker build
 
-## Contributing
+- Build for test
 
-Any type of contribution is welcome, here are some examples of how you may contribute to this project:
+```bash
+docker build --build-arg BUILD_COMMAND="build:test" -t spring_ant_frontend .
+```
 
-- Use Ant Design Pro in your daily work.
-- Submit [issues](http://github.com/ant-design/ant-design-pro/issues) to report bugs or ask questions.
-- Propose [pull requests](http://github.com/ant-design/ant-design-pro/pulls) to improve our code.
+- Build for production
 
-<a href="https://openomy.app/github/ant-design/ant-design-pro" target="_blank" style="display: block; width: 100%;" align="center">
-  <img src="https://openomy.app/svg?repo=ant-design/ant-design-pro&chart=bubble&latestMonth=3" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
-</a>
+```bash
+docker build -t spring_ant_frontend .
+```
+
+### Docker run
+
+```bash
+docker run -d -p 8000:80 --name spring_ant_frontend spring_ant_frontend
+```
+
+## [Future Release Plan, Code Contribution, and Code Convention](./readme/code_contribution.md)
