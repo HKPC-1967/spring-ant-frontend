@@ -50,10 +50,8 @@ Scripts are defined in [package.json](package.json).
 
 `config.${UMI_ENV}.ts` official guide: https://umijs.org/docs/guides/env-variables#umi_env
 
-> **Note**: If you use `npm start`, `REACT_APP_ENV` will be `false` instead of `dev`.
-
 ```bash
-npm run start:dev
+npm run start:no-mock
 ```
 
 ### Build the project

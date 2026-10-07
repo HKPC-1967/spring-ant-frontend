@@ -159,7 +159,6 @@ export const errorConfig: RequestConfig = {
           // if the error is by code, NullPointerException, etc.
           console.error('Code error', error);
 
-          // if (REACT_APP_ENV !== 'prod') {
           notification.open({
             description: error.message, // the IT can use this message to check which code is wrong
             title:

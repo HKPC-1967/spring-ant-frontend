@@ -50,10 +50,8 @@ npm install
 
 `config.${UMI_ENV}.ts` 官方文件: https://umijs.org/docs/guides/env-variables#umi_env
 
-> **注意**：如果使用 `npm start`，`REACT_APP_ENV` 的值會是 `false`，而不是 `dev`。
-
 ```bash
-npm run start:dev
+npm run start:no-mock
 ```
 
 ### 建置專案
