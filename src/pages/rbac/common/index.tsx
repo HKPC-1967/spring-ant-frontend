@@ -1,13 +1,15 @@
 import { PageContainer } from '@ant-design/pro-components';
 import { Access, useAccess } from '@umijs/max';
-import { Button, Spin, message } from 'antd';
-import ErrorMessageDemo from './components/ErrorMessageDemo';
+import { App, Button, Spin } from 'antd';
 import { useLoading } from '@/api_core/components/LoadingContext';
+import ErrorMessageDemo from './components/ErrorMessageDemo';
 
 export default () => {
   const { roleAdmin } = useAccess();
 
   const { isLoading } = useLoading();
+
+  const { message } = App.useApp();
 
   return (
     <PageContainer>

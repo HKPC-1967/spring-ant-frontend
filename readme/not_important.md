@@ -3,19 +3,19 @@
 ### Check code style
 
 ```bash
-pnpm run lint
+npm run lint
 ```
 
 You can also use script to auto fix some lint error:
 
 ```bash
-pnpm run lint:fix
+npm run lint:fix
 ```
 
 ### Test code
 
 ```bash
-pnpm test
+npm test
 ```
 
 ### Docker commands

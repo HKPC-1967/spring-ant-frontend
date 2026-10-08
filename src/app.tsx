@@ -1,45 +1,38 @@
-import { AvatarDropdown, AvatarName, Footer, Message, Question, SelectLang } from '@/components';
-import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history } from '@umijs/max';
-import React, { ReactNode } from 'react';
-import defaultSettings from '../config/defaultSettings';
-import { errorConfig } from './requestErrorConfig';
+import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link } from '@umijs/max';
 import { App, ConfigProvider } from 'antd';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import type { ReactNode } from 'react';
+import {
+  AvatarDropdown,
+  Footer,
+  Message,
+  Question,
+  SelectLang,
+} from '@/components';
+import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import defaultSettings from '../config/defaultSettings';
 import { LoadingProvider } from './api_core/components/LoadingContext';
+import { errorConfig } from './requestErrorConfig';
 
-const isDev = process.env.NODE_ENV === 'development' || REACT_APP_ENV === 'dev';
-console.log(
-  'isDev',
-  isDev,
-  'process.env.NODE_ENV',
-  process.env.NODE_ENV,
-  'REACT_APP_ENV',
-  REACT_APP_ENV,
-);
+// Initialize dayjs plugins globally
+dayjs.extend(relativeTime);
+
+const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
-export const rootContainer = (root: ReactNode) => (
-  <ConfigProvider>
-    <LoadingProvider>
-      <App>
-        <Message />
-        {root}
-      </App>
-    </LoadingProvider>
-  </ConfigProvider>
-);
-
 /**
- * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
+ * @see https://umijs.org/docs/api/runtime-config#getinitialstate
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  settingDrawerOpen?: boolean;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -47,47 +40,74 @@ export async function getInitialState(): Promise<{
         skipErrorHandler: true,
       });
       return msg.data;
-    } catch (error) {
-      history.push(loginPath);
+    } catch (_error) {
+      const { pathname, search, hash } = history.location;
+      history.replace(
+        `${loginPath}?redirect=${encodeURIComponent(pathname + search + hash)}`,
+      );
     }
     return undefined;
   };
   // 如果不是登录页面，执行
   const { location } = history;
-  if (location.pathname !== loginPath) {
+  if (
+    ![loginPath, '/user/register', '/user/register-result'].includes(
+      location.pathname,
+    )
+  ) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
       currentUser,
       settings: defaultSettings as Partial<LayoutSettings>,
+      settingDrawerOpen: false,
     };
   }
   return {
     fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
+    settingDrawerOpen: false,
   };
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
-export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+export const layout: RunTimeLayoutConfig = ({
+  initialState,
+  setInitialState,
+}) => {
   return {
-    actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
+    menuItemRender: (item, dom) => {
+      if (item.path) {
+        return (
+          <Link to={item.path} prefetch>
+            {dom}
+          </Link>
+        );
+      }
+      return dom;
+    },
+    actionsRender: () => [
+      <Question key="doc" />,
+      <SelectLang key="SelectLang" />,
+    ],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
-      title: <AvatarName />,
-      render: (_, avatarChildren) => {
-        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
-      },
+      title: 'ProUser',
+      render: (_, avatarChildren) => (
+        <AvatarDropdown>{avatarChildren}</AvatarDropdown>
+      ),
     },
-    waterMarkProps: {
-      content: initialState?.currentUser?.name,
-    },
+    // waterMarkProps: {
+    //   content: initialState?.currentUser?.name,
+    // },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
+        history.replace(
+          `${loginPath}?redirect=${encodeURIComponent(location.pathname + location.search + location.hash)}`,
+        );
       }
     },
     bgLayoutImgList: [
@@ -110,6 +130,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         width: '331px',
       },
     ],
+    links: [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -119,19 +140,24 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <>
           {children}
-          {isDev && (
-            <SettingDrawer
-              disableUrlParams
-              enableDarkTheme
-              settings={initialState?.settings}
-              onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
-                  ...preInitialState,
-                  settings,
-                }));
-              }}
-            />
-          )}
+          <SettingDrawer
+            disableUrlParams
+            enableDarkTheme
+            collapse={initialState?.settingDrawerOpen}
+            onCollapseChange={(open) => {
+              setInitialState((s) => ({
+                ...s,
+                settingDrawerOpen: open,
+              }));
+            }}
+            settings={initialState?.settings}
+            onSettingChange={(settings) => {
+              setInitialState((s) => ({
+                ...s,
+                settings,
+              }));
+            }}
+          />
         </>
       );
     },
@@ -141,9 +167,20 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 
 /**
  * @name request 配置，可以配置错误处理
- * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
+ * 它基于 axios 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
-export const request = {
+export const request: RequestConfig = {
   ...errorConfig,
 };
+
+export const rootContainer = (root: ReactNode) => (
+  <ConfigProvider>
+    <LoadingProvider>
+      <App>
+        <Message />
+        {root}
+      </App>
+    </LoadingProvider>
+  </ConfigProvider>
+);

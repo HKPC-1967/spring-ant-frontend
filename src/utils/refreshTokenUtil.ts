@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import localStorageUtil from './localStorageUtil';
 import { freshToken } from '@/services/ant-design-pro/api';
+import localStorageUtil from './localStorageUtil';
 
 // if token will expire in 5 minutes, refresh token
 const TOKEN_CHECK_IN_ADVANCE_MINUTE = 10;
@@ -12,7 +12,11 @@ const isAccessTokenExpired = () => {
   );
 
   const currentTime = dayjs().valueOf();
-  const tokenTimeLeftMinutes = (+accessTokenExpiration! - currentTime) / ONE_MINUTE;
+  if (!accessTokenExpiration) {
+    return true;
+  }
+  const tokenTimeLeftMinutes =
+    (+accessTokenExpiration - currentTime) / ONE_MINUTE;
   console.debug('jwt token time left:', tokenTimeLeftMinutes);
 
   return tokenTimeLeftMinutes < TOKEN_CHECK_IN_ADVANCE_MINUTE;

@@ -38,7 +38,7 @@ const removeAllJwtToken = (): void => {
  * remove all keys in {@link JwtTokenEnum}
  */
 const setAllJwtToken = (msg: API.LoginResult): void => {
-  set(JwtTokenEnum.accessToken, msg.accessToken!);
+  set(JwtTokenEnum.accessToken, msg.accessToken);
 
   if (ENABLE_REFRESH_TOKEN) {
     set(JwtTokenEnum.refreshToken, msg.refreshToken);
@@ -47,4 +47,11 @@ const setAllJwtToken = (msg: API.LoginResult): void => {
   }
 };
 
-export default { set, get, remove, setAllJwtToken, removeAllJwtToken, JwtTokenEnum };
+export default {
+  set,
+  get,
+  remove,
+  setAllJwtToken,
+  removeAllJwtToken,
+  JwtTokenEnum,
+};

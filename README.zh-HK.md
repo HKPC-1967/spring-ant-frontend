@@ -16,11 +16,11 @@ Spring Ant Frontend 基於 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant
 你可以對比 `main` 分支與 `original_ant_design_pro_code/release_v6.0.0-beta.1` 分支，查看我們在原始的 Ant Design Pro 程式碼基礎上做了哪些程式碼改動。  
 本專案是 [Spring Ant Family](https://github.com/HKPC-1967/spring-ant) 的前端部分。
 
-## 環境準備（Node.js 與 PNPM）
+## 環境準備（Node.js 與 npm）
 
-> 本專案使用的 Node.js 與 PNPM 版本定義在 `package.json` 的 `volta` 物件中，建議保持版本一致以防止版本相容性問題
+> 本專案要求的 Node.js 版本定義在 `package.json` 的 `engines` 欄位中，npm 隨 Node.js 一併提供。建議保持版本一致以防止版本相容性問題。
 
-### 方案 1：[使用 Volta](./readme/volta.zh-HK.md)（推薦，可管理多個專案的 Node.js 與 PNPM 版本）
+### 方案 1：[使用 Volta](./readme/volta.zh-HK.md)（推薦，可管理多個專案的 Node.js 版本）
 
 ### 方案 2：不使用 Volta（如果你不熟悉 Volta 想快速開始，但請注意 Node.js 大版本要保持一致）
 
@@ -30,25 +30,19 @@ Spring Ant Frontend 基於 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant
 node --version
 ```
 
-安裝 `pnpm`：
+檢查 `npm` 版本：
 
 ```bash
-npm install pnpm -g
-```
-
-檢查 `pnpm` 版本：
-
-```bash
-pnpm --version
+npm --version
 ```
 
 安裝依賴：
 
 ```bash
-pnpm install
+npm install
 ```
 
-## PNPM 指令稿
+## npm 指令稿
 
 指令稿定義在 [package.json](package.json) 中。
 
@@ -56,10 +50,8 @@ pnpm install
 
 `config.${UMI_ENV}.ts` 官方文件: https://umijs.org/docs/guides/env-variables#umi_env
 
-> **注意**：如果使用 `pnpm start`，`REACT_APP_ENV` 的值會是 `false`，而不是 `dev`。
-
 ```bash
-pnpm run start:dev
+npm run start:no-mock
 ```
 
 ### 建置專案
@@ -67,13 +59,13 @@ pnpm run start:dev
 - 測試環境建置（環境：`config.test.ts`）
 
 ```bash
-pnpm run build:test
+npm run build:test
 ```
 
 - 生產環境建置（環境：`config.ts`）
 
 ```bash
-pnpm run build
+npm run build
 ```
 
 ## Docker 指令稿

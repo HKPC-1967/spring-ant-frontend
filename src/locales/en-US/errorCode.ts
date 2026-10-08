@@ -2,7 +2,8 @@ export default {
   /* HTTP level status code*/
   'http.0': 'Bad network network, please try again later',
   'http.403': 'You do not have access to this resource',
-  'http.others': 'Something unexpected happened (status code:0), please try again later',
+  'http.others':
+    'Something unexpected happened (status code:0), please try again later',
 
   /* Application level error code */
   '1000': 'Something unexpected happened (status code:1), try again later',

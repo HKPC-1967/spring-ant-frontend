@@ -1,8 +1,3 @@
-import './index.less';
-
-import { Footer } from '@/components';
-import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -17,14 +12,22 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import { FormattedMessage, Helmet, history, SelectLang, useIntl, useModel } from '@umijs/max';
-import { Alert, Tabs } from 'antd';
+import {
+  FormattedMessage,
+  Helmet,
+  history,
+  SelectLang,
+  useIntl,
+  useModel,
+} from '@umijs/max';
+import { Alert, App, Button, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
-import React, { useState } from 'react';
-import { flushSync } from 'react-dom';
-import Settings from '../../../../config/defaultSettings';
-import { message } from '@/api_core/components/MessageProvider';
+import React, { startTransition, useState } from 'react';
+import { Footer } from '@/components';
+import { login } from '@/services/ant-design-pro/api';
+import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import localStorageUtil from '@/utils/localStorageUtil';
+import Settings from '../../../../config/defaultSettings';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -67,9 +70,18 @@ const ActionIcons = () => {
 
   return (
     <>
-      <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.action} />
-      <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.action} />
-      <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.action} />
+      <AlipayCircleOutlined
+        key="AlipayCircleOutlined"
+        className={styles.action}
+      />
+      <TaobaoCircleOutlined
+        key="TaobaoCircleOutlined"
+        className={styles.action}
+      />
+      <WeiboCircleOutlined
+        key="WeiboCircleOutlined"
+        className={styles.action}
+      />
     </>
   );
 };
@@ -92,7 +104,7 @@ const LoginMessage: React.FC<{
       style={{
         marginBottom: 24,
       }}
-      message={content}
+      title={content}
       type="error"
       showIcon
     />
@@ -100,17 +112,17 @@ const LoginMessage: React.FC<{
 };
 
 const Login: React.FC = () => {
-  console.log('REACT_APP_ENV', REACT_APP_ENV);
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
+  const { message } = App.useApp();
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
-      flushSync(() => {
+      startTransition(() => {
         setInitialState((s) => ({
           ...s,
           currentUser: userInfo,
@@ -127,7 +139,7 @@ const Login: React.FC = () => {
       const msg = msgBe.data;
       // console.log('login response', msg);
       if (msg.status === 'ok') {
-        localStorageUtil.setAllJwtToken(msg!);
+        localStorageUtil.setAllJwtToken(msg);
 
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -139,7 +151,6 @@ const Login: React.FC = () => {
         history.push(urlParams.get('redirect') || '/');
         return;
       }
-      // console.log(msg);
       // 如果失败去设置用户错误信息
       setUserLoginState(msg);
     } catch (error) {
@@ -178,7 +189,9 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.png" />}
           title="Spring Ant"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+          subTitle={intl.formatMessage({
+            id: 'pages.layouts.userLayout.title',
+          })}
           initialValues={{
             autoLogin: true,
           }}
@@ -273,7 +286,9 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+          {status === 'error' && loginType === 'mobile' && (
+            <LoginMessage content="验证码错误" />
+          )}
           {type === 'mobile' && (
             <>
               <ProFormText
@@ -361,15 +376,23 @@ const Login: React.FC = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+              <FormattedMessage
+                id="pages.login.rememberMe"
+                defaultMessage="自动登录"
+              />
             </ProFormCheckbox>
-            <a
+            <Button
+              type="link"
               style={{
                 float: 'right',
+                padding: 0,
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
-            </a>
+              <FormattedMessage
+                id="pages.login.forgotPassword"
+                defaultMessage="忘记密码"
+              />
+            </Button>
           </div>
         </LoginForm>
       </div>

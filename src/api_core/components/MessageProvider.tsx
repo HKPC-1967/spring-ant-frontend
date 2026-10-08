@@ -17,4 +17,4 @@ export default () => {
   return null;
 };
 
-export { message, notification, modal };
+export { message, modal, notification };
