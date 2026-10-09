@@ -1,8 +1,9 @@
 # All 3 versions below were updated on 2026-02-08. Note that Node 24 will have the compatibility issue: "No such module: http_parser error" during max setup (recent Node builds removed http_parser bindings).
 # Node.js version. It is better to use the same version via Volta for local development.
-ARG NODE_VERSION=22.22.0
+# Check the lated NODE_VERSION (list 26 alpine tags): curl -s "https://hub.docker.com/v2/repositories/library/node/tags/?page_size=100&name=26" | jq -r '.results[].name' | grep alpine
+ARG NODE_VERSION=26.10.0
 # other versions
-ARG SERVE_VERSION=14.2.5
+ARG SERVE_VERSION=14.2.6
 
 ################################################################################
 # Use node image for base image for all stages.

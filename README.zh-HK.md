@@ -2,7 +2,7 @@ Language : [English](README.md) | [简体中文](README.zh-CN.md)
 
 ## Spring Ant Frontend ([Spring Ant Family](https://github.com/HKPC-1967/spring-ant)的前端部分)
 
-Spring Ant Frontend 基於 [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro)，這是一個開箱即用的企業級 UI 框架，也是我們找到的最好的用於開發後台管理系統的 React 框架。可在這裡預覽原始 Ant Design Pro 功能：[Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis)。
+Spring Ant Frontend 基於 [Ant Design Pro](https://github.com/ant-design/ant-design-pro)，這是一個開箱即用的企業級 UI 框架，也是我們找到的最好的用於開發後台管理系統的 React 框架。可在這裡預覽原始 Ant Design Pro 功能：[Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis)。
 
 我們對基礎框架做了以下增強：
 
@@ -89,5 +89,14 @@ docker build -t base_front .
 ```bash
 docker run -d -p 80:80 --name base_front base_front
 ```
+
+## 透過 Git 分支名稱進行版本管理
+下表列出了各分支所基於的 ant-design-pro 版本：
+
+|  spring-ant-frontend 分支 | 修改自（ant-design-pro Simple Version） |
+| :--- | :--- |
+| `main` | `original_ant_design_pro_code/release_v6.0.3` |
+| `spring_ant_frontend_code/release_v6.0.0-beta.1` | `original_ant_design_pro_code/release_v6.0.0-beta.1` |
+
 
 ## [後續發佈計畫、程式碼貢獻與程式碼規範](./readme/code_contribution.zh-HK.md)

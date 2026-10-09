@@ -2,7 +2,7 @@ Language : [简体中文](README.zh-CN.md) | [繁體中文](README.zh-HK.md)
 
 ## Spring Ant Frontend (Frontend of [Spring Ant Family](https://github.com/HKPC-1967/spring-ant))
 
-Spring Ant Frontend is based on [Ant Design Pro v6.0.0-beta.1](https://github.com/ant-design/ant-design-pro), an out-of-the-box UI solution for enterprise applications，and the best React framework we've found for admin-panel web applications.  
+Spring Ant Frontend is based on [Ant Design Pro](https://github.com/ant-design/ant-design-pro), an out-of-the-box UI solution for enterprise applications，and the best React framework we've found for admin-panel web applications.  
 Preview the original Ant Design Pro features here: [Ant Design Pro Preview](https://preview.pro.ant.design/dashboard/analysis).  
 We enhanced the base project with:
 
@@ -89,5 +89,13 @@ docker build -t spring_ant_frontend .
 ```bash
 docker run -d -p 8000:80 --name spring_ant_frontend spring_ant_frontend
 ```
+## Version Control via Git Branch Name
+The table below outlines the base ant-design-pro versions from which our branches were modified:
+
+|  spring-ant-frontend Branch | Modified from (ant-design-pro Simple Version) |
+| :--- | :--- |
+| `main` | `original_ant_design_pro_code/release_v6.0.3` |
+| `spring_ant_frontend_code/release_v6.0.0-beta.1` | `original_ant_design_pro_code/release_v6.0.0-beta.1` |
+
 
 ## [Future Release Plan, Code Contribution, and Code Convention](./readme/code_contribution.md)

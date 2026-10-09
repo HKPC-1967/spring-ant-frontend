@@ -105,5 +105,8 @@
       "CNAME",
       "create-umi"
     ]
+  },
+  "volta": {
+    "node": "26.10.0"
   }
 }
